@@ -212,7 +212,6 @@ cb_cookie:
 			}
 /*================pour supprimer un cookie ++++++++++++++++++++++++++++++++++++++++*/
 			else if (b.ac == "delete-cookie"){
-			
 				this.resp.writeHead(200,{"Content -Type": "application/json"});
 				db.delete_cookie(this.req.headers.cookie, this.resp);
 				return;
@@ -243,6 +242,9 @@ cb_cookie:
 			this.resp.writeHead(200,{"Content-Type": "application/json" });
 				db.delete_account(this.req.headers.cookie, b.pwd, this.resp);
 				return;
+			} else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				db.delete_account_user(this.req.headers.cookie, this.resp);
 			}
 			
 			

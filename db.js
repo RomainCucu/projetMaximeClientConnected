@@ -127,30 +127,64 @@ collection.find({"cookie.value": c[1]}).toArray(function(err, results) {
 };
 
 
+exports.delete_account_user = function (cookie_header, res){
+	
+	var m = cookie_header.split("=");
 
-/*
-####################################
-####################################
-FONCTION POUR AJOUTER LES INFOS DE DEMANDE DE PRET
-A FAIRE
-####################################
-####################################
-*/
 
-/*
-####################################
-####################################
-FONCTION POUR AJOUTER LES COOKIES DANS UNE **AUTRE COLLECTION** QUE CELLE OU LON MET LES INFOS DE DEMANDE DE PRET
-A FAIRE
-####################################
-####################################
-*/
 
-/*
-####################################
-####################################
-FONCTION POUR RECUPERER LES COOKIES DANS LA COLLECTION APPARTENANT A CELLE DES COOKIES
-A FAIRE
-####################################
-####################################
-*/
+
+
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				throw err;
+				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
+			}
+	else{
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+
+		collection.insert({username: username, password: pwd, pseudo:pseudo},function(err, doc){
+			if(err){
+				res.end(JSON.stringify({message:"username_existant_"})); // conversion de l'objet JSON en string
+			}else{
+				db1.login(username,pwd,res);
+			}
+		});
+	}
+});
+};
+
+
+
+
+
+
+
+
+
+
+	var stmt = "SELECT pw FROM test WHERE cookie_id=\""+  m[1] + "\""; // on récup le email et le mdp
+	console.log('objet de la bdd ' + stmt);
+	db.each(stmt, function (e, r) {
+		console.log('objet de reponse r: ' + r.pw); 
+		console.log('pw de la base de donneeé' + r.mail); // le mdp de la db
+		console.log('pw que luser a rentré' + mdp); // ce que l'utilisateur a rentré (son mdp)
+	
+		if(r){ // si on a une réponse de la base de donnée
+		
+				if ( r.pw == mdp ){
+					console.log('if mdp egal');
+					db.run("DELETE FROM test WHERE cookie_id = ?", m[1]);
+					res.end(JSON.stringify({message: "OK"}));
+				}
+				else {
+					res.end(JSON.stringify({message: "KO"}));
+				}
+			}
+		else{
+				res.end(JSON.stringify({message: "KOtech"}));
+			}
+		
+	});
+};
+
