@@ -10,26 +10,30 @@ var contenuHTML = {};//objet qui va contenir temporairement le code html (du bou
 
 // fonction appelée au chargement de la page (voir window.onload au bas de la page)
 index.start = function () {
-	index.btn_check_login_formular_(); //action du bouton login
-	index.btn_check_information_for_loan_demand_(); //action du bouton check loan demand
+	index.btn_check_login_formular_(); //action du bouton login	
 	index.btn_register_formular_();
 };
 
-index.btn_check_information_for_loan_demand_ = function(){
-	//ce quil se passe quand on appuie sur le bouton check
-	$( "#check_formulaire_" ).submit( function(event){
-		index.fill_data_loan_demand_individual_client_(); // voir fonction plus bas
-	 	index.post(data, index.callback);
-	 	event.preventDefault(); // On désactive le fonctionnement par défault du bouton. Ainsi en cliquant dessus, on ne recharge pas la page
-	});
-};
 
 index.btn_register_formular_ = function(){
 	$( "#register_formulaire_" ).submit( function(event){
-	alert('register envoyé');
-	$('#modal-reg').modal('hide');
-	 event.preventDefault();//à laisser
-	} );
+	event.preventDefault();//à laisser
+	if(document.getElementById('register_password').value == document.getElementById('register_confirm_password').value){
+		index.fill_data_register();		
+		index.post(data, index.callback);//passage au router des données
+		index.replace_content_by_animation_GIF_loader("btn_register_");//pour remplacer le bouton par un chargement
+		//$('#modal-reg').modal('hide');
+	}else{
+		alert("confirm password et password different");
+	}
+	});
+};
+
+index.fill_data_register = function(){
+	data.ac = "register";
+	data.username =document.getElementById('register_username').value.toLowerCase();
+	data.password =document.getElementById('register_password').value;
+
 };
 
 index.btn_check_login_formular_ = function(){
@@ -49,13 +53,6 @@ index.fill_data_login = function(){
 	data.password = document.getElementById('input_password_').value;
 };
 
-index.fill_data_loan_demand_individual_client_ = function(){
-	data.ac="envoie_demande_de_pret_individuelle_";
-	data.input_borrowed_capital_ = document.getElementById('input_borrowed_capital_').value;
-	data.input_age_of_demander_ = document.getElementById('input_age_of_demander_').value;
-	data.input_annual_incomes_ = document.getElementById('input_annual_incomes_').value;
-	data.input_duration_loan_in_years_ = document.getElementById('input_duration_loan_in_years_').value;
-};
 
 index.post = function (data, callback) {
     var xhr = new XMLHttpRequest();
@@ -72,18 +69,17 @@ index.callback = function () {
 		console.log("this.responsetext :" + this.responseText);
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
 		
-		if (r.message=="login_connexion_autorised_admin_"){
-			window.location = "./html/private/admin.html";
-		}else if(r.message=="login_connexion_autorised_client_"){
-			window.location = "./html/private/client.html";
+		if (r.message=="login_connexion_autorised_"){
+			window.location = "./html/connected.html";
 		}else if (r.message=="login_connexion_refused"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			index.mettre_les_cases_en_rouges_du_formulaire("boites_pour_entrer_les_login_");
 			alert("Erreur de connexion");
-		}else if(r.message == "pret_accepte"){ // utilisé avec algo.js
-			alert("Pret accepté !");
-		}else if(r.message == "pret_refuse"){ // avec algo.js
-			alert("Pret refusé !");
+		}else if (r.message == "register_length_problem_username_"){
+			alert("username compris entre 3 et 15 caract SVP");
+		}else if(r.message=="username_existant_"){
+			alert("username existant");
+						document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 		}else{
 			alert("demande  rejetée !");
 		}

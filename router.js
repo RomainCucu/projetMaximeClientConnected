@@ -63,7 +63,7 @@ get_method:
 		this.filetype = this.filetype[this.filetype.length - 1];
 		this.path = "." + u.path; //the website in the same directory than the node server
 		console.log(this.path);
-		if (u.path == "/html/private/admin.html")//pour voir dans quel page on va
+		if (u.path == "/html/connected.html")//pour voir dans quel page on va
 			{				
 				db.valid_cookie(this.req.headers.cookie, this, "check_user"); // on verifie si c un user (si oui il accede aux pages ou il faut être admin sinon on le redirige sur la page d'accueil)
 			}
@@ -74,8 +74,7 @@ get_method:
 
 check_user:
 	function (ret) {
-		console.log(ret);
-		if (ret.a == true && ret.b == 1) {			
+		if (ret == true) {			
 			this.read_file();
 		}else{
 			this.resp.end('<p>Non connect&eacute</p><A HREF="../../index.html">Cliquer pour aller au menu principal</A><script>window.onload=function(){setTimeout(function(){window.location="../../index.html"},2000)}</script>');
@@ -106,18 +105,18 @@ go_post:
 			db.login(b.userName, b.password, this.resp);
 			console.log("ENVOIE D'UNE DEMANDE DE LOGIN");
 		}
-		else if (b.ac == "envoie_demande_de_pret_individuelle_") {	
-			console.log("ENVOIE D'UNE DEMANDE DE PRET POUR INDIVIDUEL");
-			algo.calcul_autorisation(b.input_borrowed_capital_, b.input_age_of_demander_, b.input_annual_incomes_ , b.input_duration_loan_in_years_, this.resp); // voir le fichier algo.js			
-		}
+		
 		else if (b.ac == "register"){
 			this.resp.writeHead(200,{"Content -Type": "application/json"});
-			if (b.login.length >= 3 && b.login.length < 15){
-			db.insert(b.login, b.password, b.email, this.resp);
+			if (b.username.length >= 3 && b.username.length < 15){
+				db.register(b.username, b.password, this.resp);
 			}else {
-				this.resp.end(JSON.stringify({message: "short"}));
+				this.resp.end(JSON.stringify({message: "register_length_problem_username_"}));
 			}
 			
+		}else if (b.ac == "envoie_demande_de_pret_individuelle_") {	
+			console.log("ENVOIE D'UNE DEMANDE DE PRET POUR INDIVIDUEL");
+			algo.calcul_autorisation(b.input_borrowed_capital_, b.input_age_of_demander_, b.input_annual_incomes_ , b.input_duration_loan_in_years_, this.resp); // voir le fichier algo.js			
 		}
 		
 		else if (b.ac == "get_charts_intraday") {
