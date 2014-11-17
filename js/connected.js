@@ -4,25 +4,31 @@
 */
 
 // DOCUMENT PARTIE SERVEUR 
-var index = {};
+var connected = {};
+var data = {};
 
-index.start=function(){
-	document.addEventListener('click', index.on_click_function_);
+connected.start=function(){
+	document.addEventListener('click', connected.on_click_function_);
 };
 
-index.on_click_function_ = function(ev){
+connected.on_click_function_ = function(ev){
 	var src = ev.target;
 	var id = src.id;
 
 	if(id == "logout_link_"){
 		alert('logout');
-	}else if(id == "delete_link_"){
-		alert("delete");
+	}else if(id == "delete_account_"){
+		connected.fill_data_();
+		connected.post(data, connected.callback); //passage au router des données
 	}
 };
 
+connected.fill_data_ = function(){
+	data.ac = "delete_account";
+};
 
-index.post = function (data, callback) {
+
+connected.post = function (data, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
     xhr.onreadystatechange = callback;
@@ -30,26 +36,24 @@ index.post = function (data, callback) {
     xhr.send(JSON.stringify(data));
 };
 
-// fonction de retour pour notre objet index
-index.callback = function () {
-	// si tout s'est bien passé
-	if (this.readyState == 4 && this.status == 200) {		
-		console.log("this.responsetext :" + this.responseText);
-		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-		
-		if (r.message=="login_connexion_autorised_"){
-			window.location = "./html/connected.html";
-		}else if (r.message=="login_connexion_refused"){
-			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-			index.mettre_les_cases_en_rouges_du_formulaire("boites_pour_entrer_les_login_");
-			alert("Erreur de connexion");
-		}else{
-			alert("demande  rejetée !");
-		}
+
+
+connected.callback = function () {
+	if (this.readyState == 4 && this.status == 200) {
+	console.log("this.responsetext :" + this.responseText);
+	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+
+	if (r.message=="acount_deleted"){
+		window.location = "../connected.html";
+	}else if (r.message=="error_delete_account"){
+		alert("Erreur de suppression du compte");
+	}else{
+		alert("Erreur de connexion à la db");
+	}
 }
 };
 
 window.onload = function(){
-		setTimeout(index.start, 1);
+		setTimeout(connected.start, 1);
 };
 

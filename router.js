@@ -2,7 +2,6 @@ var util = require("util");
 var url = require("url"); 
 var fs = require("fs");
 var db = require("./db.js");
-var algo = require("./js/algo.js");
 
 var verification_data_entrantes = {};
 
@@ -245,6 +244,7 @@ cb_cookie:
 			} else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.delete_account_user(this.req.headers.cookie, this.resp);
+				return;
 			}
 			
 			

@@ -129,25 +129,22 @@ collection.find({"cookie.value": c[1]}).toArray(function(err, results) {
 
 exports.delete_account_user = function (cookie_header, res){
 	
-	var m = cookie_header.split("=");
-
-
-
-
+	var m = cookie_header.split("cookieName=");
+	console.log(m);
 
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				throw err;
+				console.log(error);
 				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
 			}
 	else{
+		console.log(m[1]);
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
-
-		collection.insert({username: username, password: pwd, pseudo:pseudo},function(err, doc){
+		collection.remove({"cookie.value": m[1]},function(err, doc){
 			if(err){
-				res.end(JSON.stringify({message:"username_existant_"})); // conversion de l'objet JSON en string
+				res.end(JSON.stringify({message:"error_delete_account"})); // conversion de l'objet JSON en string
 			}else{
-				db1.login(username,pwd,res);
+				res.end(JSON.stringify({message:"account_deleted"}));
 			}
 		});
 	}
@@ -161,30 +158,4 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 
 
-
-
-	var stmt = "SELECT pw FROM test WHERE cookie_id=\""+  m[1] + "\""; // on récup le email et le mdp
-	console.log('objet de la bdd ' + stmt);
-	db.each(stmt, function (e, r) {
-		console.log('objet de reponse r: ' + r.pw); 
-		console.log('pw de la base de donneeé' + r.mail); // le mdp de la db
-		console.log('pw que luser a rentré' + mdp); // ce que l'utilisateur a rentré (son mdp)
-	
-		if(r){ // si on a une réponse de la base de donnée
-		
-				if ( r.pw == mdp ){
-					console.log('if mdp egal');
-					db.run("DELETE FROM test WHERE cookie_id = ?", m[1]);
-					res.end(JSON.stringify({message: "OK"}));
-				}
-				else {
-					res.end(JSON.stringify({message: "KO"}));
-				}
-			}
-		else{
-				res.end(JSON.stringify({message: "KOtech"}));
-			}
-		
-	});
-};
 
