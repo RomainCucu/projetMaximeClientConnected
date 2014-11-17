@@ -213,10 +213,14 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						console.log(err);
 						res.end(JSON.stringify({message: "pseudo_request_failed"})); // on convertit le string en objet
 					}else{
-						infos={};
+						var infos={};
 						infos.liste_user_found = [];
 						for(var i in results){
-							infos.liste_user_found.push(results[i].pseudo);
+							
+							if(results[i].pseudo.toLowerCase().indexOf(search_name.toLowerCase())> -1)//pour voir si la chaine est contenu dans un pseudo
+								{
+									infos.liste_user_found.push(results[i].pseudo);
+								}
 						}
 						infos.message="recherche_dutilisateurs_"; // ajout d'un attribut message a l'objet pour gérer les cas dans index.jsr
 						res.end(JSON.stringify(infos)); // conversion de l'objet JSON en string

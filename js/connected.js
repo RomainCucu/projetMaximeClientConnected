@@ -36,6 +36,7 @@ connected.show_pseudo_ = function(){
 connected.btn_search_a_user = function(){
 	$( "#search_form_" ).submit( function(event){
 	event.preventDefault();//à laisser
+	$('#affichage_users_found_under_').popover('destroy');
 	connected.post({ac:"search_user_request",search_name:document.getElementById("affichage_users_found_under_").value}, connected.callback); //passage au router des données	
 	//document.getElementById("affichage_users_found_under_").data-toggle="popover"
 	});
@@ -80,6 +81,7 @@ window.onload = function(){
 };
 
 connected.show_user_under_search_bar = function(tab){
+	console.log("kokkok");
 	var content_tmp="";
 	for(var i in tab){
 		content_tmp+= "<p>"+tab[i]+"</p>";
