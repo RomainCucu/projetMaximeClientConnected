@@ -8,8 +8,8 @@ var connected = {};
 var data = {};
 
 connected.start=function(){
-
-	document.addEventListener('click', connected.on_click_function_);
+	document.addEventListener('click', connected.on_click_function_);//evenement on clique
+	connected.show_pseudo_();
 };
 
 connected.on_click_function_ = function(ev){
@@ -26,6 +26,10 @@ connected.on_click_function_ = function(ev){
 
 connected.fill_data_ = function(){
 	data.ac = "delete_account";
+};
+
+connected.show_pseudo_ = function(){
+	connected.post({ac:"pseudo_request_"}, connected.callback); //passage au router des données
 };
 
 
@@ -52,9 +56,11 @@ connected.callback = function () {
 		window.location = "../index.html";
 	}else if (r.message=="log_out_failed"){
 		alert("Erreur de deconnexion du compte");
+	}else if (r.message=="pseudo_request_successfull"){
+		document.getElementById("showing_pseudo").innerHTML = "signed as "+r.pseudo;
 	}
 	else{
-		alert("Erreur de connexion à la db");
+		alert("Erreur");
 	}
 }
 };

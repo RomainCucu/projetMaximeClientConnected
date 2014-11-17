@@ -165,8 +165,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						res.end(JSON.stringify({message: "log_out_failed"})); // on convertit le string en objet
 					}else{						
 										infos={};
-										infos.message="logout_successful"; // ajout d'un attribut message a l'objet pour gérer les cas dans index.js
-										res.writeHead(200, {"Content-Type": "'text/plain'", "Set-Cookie" : 'cookieName='+cookie.value+';expires='+cookie.expire});										
+										infos.message="logout_successful"; // ajout d'un attribut message a l'objet pour gérer les cas dans index.js										
 										res.end(JSON.stringify(infos)); // conversion de l'objet JSON en string
 										db.close(); // on referme la db
 					}
@@ -175,11 +174,28 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 });//conecct
 };
 
-
-
-
-
-
-
-
+exports.pseudo_request_ = function(cookie,res){
+var m = cookie.split("cookieName=");
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				console.log(error);
+				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
+			}
+	else{
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
+					if(err) {
+						console.log(err);
+						res.end(JSON.stringify({message: "pseudo_request_failed"})); // on convertit le string en objet
+					}else{
+										infos={};
+										infos.pseudo=results[0].pseudo;
+										infos.message="pseudo_request_successfull"; // ajout d'un attribut message a l'objet pour gérer les cas dans index.jsr
+										res.end(JSON.stringify(infos)); // conversion de l'objet JSON en string
+										db.close(); // on referme la db
+					}
+				});
+	}
+});//conecct
+};
 

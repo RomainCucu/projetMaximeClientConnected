@@ -158,6 +158,10 @@ cb_cookie:
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.delete_account_user(this.req.headers.cookie, this.resp);
 				return;
+			}else if (b.ac == "pseudo_request_"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				db.pseudo_request_(this.req.headers.cookie, this.resp);
+				return;
 			}
 		}
 				
