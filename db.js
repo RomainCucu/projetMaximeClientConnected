@@ -74,6 +74,8 @@ exports.register = function (username,pwd,res){
 /*
 Fonction pour le bouton register
 */
+pseudo = username;
+username = username.toLowerCase();
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
 						throw err;
@@ -82,7 +84,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 
-		collection.insert({username: username, password: pwd},function(err, doc){
+		collection.insert({username: username, password: pwd, pseudo:pseudo},function(err, doc){
 			if(err){
 				res.end(JSON.stringify({message:"username_existant_"})); // conversion de l'objet JSON en string
 			}else{

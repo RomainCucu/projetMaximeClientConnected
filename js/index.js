@@ -31,7 +31,7 @@ index.btn_register_formular_ = function(){
 
 index.fill_data_register = function(){
 	data.ac = "register";
-	data.username =document.getElementById('register_username').value.toLowerCase();
+	data.username =document.getElementById('register_username').value;
 	data.password =document.getElementById('register_password').value;
 
 };
@@ -65,7 +65,7 @@ index.post = function (data, callback) {
 // fonction de retour pour notre objet index
 index.callback = function () {
 	// si tout s'est bien passé
-	if (this.readyState == 4 && this.status == 200) {
+	if (this.readyState == 4 && this.status == 200) {		
 		console.log("this.responsetext :" + this.responseText);
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
 		
