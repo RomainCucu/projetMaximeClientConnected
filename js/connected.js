@@ -9,7 +9,8 @@ var data = {};
 
 connected.start=function(){
 	document.addEventListener('click', connected.on_click_function_);//evenement on clique
-	connected.show_pseudo_();
+	connected.btn_search_a_user();//pour la rechearche d'users
+	connected.show_pseudo_();//pour afficher le pseudo
 };
 
 connected.on_click_function_ = function(ev){
@@ -32,6 +33,13 @@ connected.show_pseudo_ = function(){
 	connected.post({ac:"pseudo_request_"}, connected.callback); //passage au router des données
 };
 
+connected.btn_search_a_user = function(){
+	$( "#search_form_" ).submit( function(event){
+	event.preventDefault();//à laisser
+	connected.post({ac:"search_user_request",search_name:document.getElementById("affichage_users_found_under_").value}, connected.callback); //passage au router des données	
+	//document.getElementById("affichage_users_found_under_").data-toggle="popover"
+	});
+};
 
 connected.post = function (data, callback) {
     var xhr = new XMLHttpRequest();
@@ -58,6 +66,8 @@ connected.callback = function () {
 		alert("Erreur de deconnexion du compte");
 	}else if (r.message=="pseudo_request_successfull"){
 		document.getElementById("showing_pseudo").innerHTML = "signed as "+r.pseudo;
+	}else if(r.message=="recherche_dutilisateurs_"){
+		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant les user pour afficher les user trouvé
 	}
 	else{
 		alert("Erreur");
@@ -67,5 +77,19 @@ connected.callback = function () {
 
 window.onload = function(){
 		setTimeout(connected.start, 1);
+};
+
+connected.show_user_under_search_bar = function(tab){
+	var content_tmp="";
+	for(var i in tab){
+		content_tmp+= "<p>"+tab[i]+"</p>";
+	}
+	$('#affichage_users_found_under_').popover({
+		title : 'resultat de la recherche',
+		html: true,
+		content : content_tmp,
+		placement : "bottom"
+	});
+	$('#affichage_users_found_under_').popover('show');
 };
 
