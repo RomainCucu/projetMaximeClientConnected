@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+	 
+		<!-- BOOTSTRAP -->
+		<script  type="text/javascript"  src="dist/js/jquery.js"></script>
+		<script  type="text/javascript"  src="dist/js/bootstrap.min.js"> </script>
+		<link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="dist/css/bootstrap-theme.min.css" />
+	
+		<title>Risque de contrepartie et modélisation de la CVA</title>
+  </head>
+  
+ 	<body style="padding-top: 0px;">
+ 	
+  	<div class="container">
+  		
+				<!-- ///////// barre de menu horizontale tout en haut ////////// -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+						<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+							<div class="navbar-header">
+								<a class="navbar-brand active" href="index.html">
+									<p style="font:15px verdana; color:#000;">
+										Risque de contrepartie et modélisation de la CVA
+									</p>
+								</a>
+								 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+									 <span class="sr-only">Toggle navigation</span>
+									 <span class="icon-bar"></span>
+									 <span class="icon-bar"></span>
+									 <span class="icon-bar"></span>
+								 </button>
+							</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+							<div class=" collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-top:10px">
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								<!--  FORMULAIRE LOGIN-->
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								<form id="log_in_formular_"class="col-md-offset-6 form-inline" role="form" >
+									<div class="form-group  has-feedback">
+										<span id="statut-du-compte"></span>
+									</div>
+									<div class="form-group has-feedback boites_pour_entrer_les_login_"  >
+										<label class="sr-only" for="exampleInputEmail2">Login</label>
+										<input   type="text" class="form-control" id="input_username_" placeholder="Enter LOGIN" autofocus required>
+										<span class="glyphicon"></span>
+									</div>
+									<div class="form-group has-feedback boites_pour_entrer_les_login_">
+										<label class="sr-only" for="exampleInputPassword2">Password</label>
+										<input  type="password" class="form-control" id="input_password_" placeholder="Password" required>
+										<span class="glyphicon"></span>
+									</div>
+									<div id="button_login" class="form-group">
+										<div class="col-sm-offset-0 col-sm-2">
+										  <input class="btn btn-default" type="submit" value="LOG-IN" 
+										  />
+										</div>
+									</div>
+
+									<div class="btn btn-primary " data-toggle="modal" data-target="#modal-reg">
+										Register
+									</div>
+								
+								</form>
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								<!-- ############## -->
+								
+							</div><!-- /.navbar-collapse -->
+						</div>
+					</div><!-- /.container-fluid -->
+				</div><!-- /.col-md-12 -->
+			</div><!-- /.row -->
+				<!-- ///////// FIN barre de menu horizontale tout en haut ////////// -->
+			
+		
+			
+			
+				<div class="row" style="margin-top:70px;">
+					<div class="col-md-10 img-thumbnail jumbotron" style="padding:8px;">
+						<div>
+							<h1>Hello and welcome.</h1>
+							<p>You want	to get a loan ?</p>
+							<p>Nothing is easier !</p>
+							<p>Please complete the fields below and confirm to see if you are eligible or not.
+						</div>
+					</div>
+				</div>
+				
+				
+				<!-- ############## -->
+				<!-- ############## -->
+				<!-- ############## -->
+				<!-- ############## -->
+				<!-- pour les informations à rentrer -->
+				<!-- ############## -->
+				<!-- ############## -->
+				<!-- ############## -->
+				<!-- ############## -->
+
+
+<!-- ////////////////// Choix du type de client (****** ACORDEON *****) /////////////////////// -->
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Individual Client
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+      
+      <!-- ////////////// INFOS FORMULAIRE CLIENT pour les info ////////////// -->
+				<div class="row">
+					<div class="col-md-12">
+						<form id="check_formulaire_" class="form-horizontal" action="" >
+						  <div class="form-group">
+							<label for="input_borrowed_capital_" class="col-sm-2 control-label">Borrowed Capital</label>
+								<div class="col-sm-5 input-group">
+									<input min="0" max="1000000000" type="number" class="form-control" id="input_borrowed_capital_" placeholder="Please enter a number" required>
+									<span class="input-group-addon">$</span>
+								</div>
+						  </div>
+						  <div class="form-group">
+							<label for="input_age_of_demander_" class="col-sm-2 control-label">Age of the borrower</label>
+							<div class="col-sm-5 input-group">
+							  <input min="18" max="99" type="number" class="form-control" id="input_age_of_demander_" placeholder="Please enter your age" required>
+							  <span class="input-group-addon">years old</span>
+							</div>
+						  </div>
+						  <div class="form-group">
+							<label for="input_annual_incomes_" class="col-sm-2 control-label">Net annual incomes of the borrower ($)</label>
+							<div class="col-sm-5 input-group">
+							  <input min="0" max="1000000000"  type="number" class="form-control" id="input_annual_incomes_" placeholder="Please enter your net annual incomes" required>
+							  <span class="input-group-addon">$</span>
+							</div>
+						  </div>
+						  <div class="form-group">
+							<label for="input_duration_loan_in_years_" class="col-sm-2 control-label">Loan duration (max 25)</label>
+							<div class="col-sm-5 input-group">
+							  <input min="0" max="25"  type="number" class="form-control" id="input_duration_loan_in_years_" placeholder="Please a loan duration" required>
+							  <span class="input-group-addon">years</span>
+							</div>
+						  </div>
+						  
+						  <div class="form-group">
+							<div class="col-sm-offset-0 col-sm-2">
+							  	<input class="btn btn-primary btn-block btn-lg" type="submit" value="check"/>
+							</div>
+						  </div>
+						</form>
+					</div>
+				</div>
+
+<!-- ////////////// fin des informations à entrer ////////////////////// -->
+
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          SMB
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          Very big companies
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /////////////////// Fin choix du type de client ////////////////////// -->
+
+
+
+<!-- Button trigger modal sur lequel on simule le clique lors de la connexion  -->
+<!--
+<button type="button" id="bt1" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none">
+  Launch demo modal
+</button>
+-->
+<!-- Modal lancé lors de la connexion-->
+<!--
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Tentative de connexion en cours...</h4>
+      </div>
+      <div class="modal-body">
+        <img src="./images/gif_loader/troll_loader.gif" style="height:1000px width:auto" >
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+
+			
+					<!-- Modal pour le register-->
+					<div class="modal fade" id="modal-reg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  						<div class="modal-dialog">
+  						  <div class="modal-content">
+  						    <div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">Registration</h4>
+     						</div>
+
+     						<div class="modal-body">
+     							<form class="form-inline" role="form" id="register_formulaire_" action="">
+									 <div class="form-group">
+									    <label class="sr-only" for="register_username">Username</label>
+									    <input type="texte" class="form-control" id="register_username" placeholder="Username" required>
+									  </div>
+									  <div class="form-group">
+									    <label class="sr-only" for="register_mail">Email</label>
+									    <input type="email" class="form-control" id="register_mail" placeholder="Email" required>
+									  </div>
+									  </br></br>
+									  <div class="form-group">
+									    <label class="sr-only" for="register_password">Password</label>
+									    <input type="password" class="form-control" id="register_password" placeholder="Password" required>
+									  </div>
+									  <div class="form-group">
+									    <label class="sr-only" for="register_confirm_password">Confirm Password</label>
+									    <input type="password" class="form-control" id="register_confirm_password" placeholder="Confirm Password" required>
+									  </div>
+									</br></br>
+									<button type="button" id="close-reg" class="btn btn-default" data-dismiss="modal">Close</button>
+									  <div class="form-group">
+											<div class="col-sm-4">
+											  	<input class="btn btn-primary" type="submit" value="Register Now !"/>
+											</div>
+										</div>
+								</form>
+  								
+						    </div>
+     						
+    					</div>
+  					</div>
+					</div>
+					<!-- fin du modal -->   	
+		
+	</div>
+
+
+<script  type="text/javascript"  src="js/index.js"></script>
+	</body>
+</html>
+		
