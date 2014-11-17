@@ -149,6 +149,32 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 });
 };
 
+exports.logout_account_user = function(cookie, res){
+
+var m = cookie.split("cookieName=");
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				console.log(error);
+				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
+			}
+	else{
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		collection.update({"cookie.value": m[1]},{ $set: {cookie:0}}, { upsert: true }, function(err, docs){
+					if(err) {
+						console.log(err);
+						res.end(JSON.stringify({message: "log_out_failed"})); // on convertit le string en objet
+					}else{						
+										infos={};
+										infos.message="logout_successful"; // ajout d'un attribut message a l'objet pour gérer les cas dans index.js
+										res.writeHead(200, {"Content-Type": "'text/plain'", "Set-Cookie" : 'cookieName='+cookie.value+';expires='+cookie.expire});										
+										res.end(JSON.stringify(infos)); // conversion de l'objet JSON en string
+										db.close(); // on referme la db
+					}
+				});
+	}
+});//conecct
+};
+
 
 
 

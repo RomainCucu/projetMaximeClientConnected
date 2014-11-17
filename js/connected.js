@@ -17,7 +17,7 @@ connected.on_click_function_ = function(ev){
 	var id = src.id;
 
 	if(id == "logout_link_"){
-		alert('logout');
+		connected.post({ac:"log_out_account"}, connected.callback); //passage au router des données
 	}else if(id == "delete_account_"){
 		connected.fill_data_();
 		connected.post(data, connected.callback); //passage au router des données
@@ -48,7 +48,12 @@ connected.callback = function () {
 		window.location = "../index.html";
 	}else if (r.message=="error_delete_account"){
 		alert("Erreur de suppression du compte");
-	}else{
+	}else if (r.message=="logout_successful"){
+		window.location = "../index.html";
+	}else if (r.message=="log_out_failed"){
+		alert("Erreur de deconnexion du compte");
+	}
+	else{
 		alert("Erreur de connexion à la db");
 	}
 }

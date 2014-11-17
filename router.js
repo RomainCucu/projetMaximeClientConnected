@@ -150,90 +150,10 @@ cb_cookie:
 		var b = this.b;
 		if (ret) {
 /*++++++++++++++++++++++++++++++++++++++++++++MY WALLET++++++++++++++++++++++++++++*/		
-			if (b.ac == "buy-btn"){
+			if (b.ac == "log_out_account"){
 				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.buy( b.wallet, b.nbstock, this.req.headers.cookie, this.resp);	
-				return;
-			}
-			else if (b.ac == 'get-money'){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.get_money(this.req.headers.cookie, this.resp);
-				return;
-			}
-			
-			else if (b.ac == "reset-btn"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.reset_btn(this.req.headers.cookie, this.resp);
-				return;		
-			}
-/*++++++++++++++++++++++++++++++GET ID JS++++++++++++++++++++++++++++*/			
-			else if (b.ac == 'get-id'){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-
-				db.get_id(this.req.headers.cookie, this.resp);
-				return;
-			}
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++CHATROOM++++++++++++++++++++++++++++*/
-			else if(b.ac == "post-btn"){
-			//console.log("=======aloalaoalaolaoaloallaolaoaloalaoalaoalaoalo=============");
-				if (b.content.length <= 151){ // si le message est inférieur a 150 caractères
-					this.resp.writeHead(200,{"Content -Type": "application/json"});
-					db.insert_message_forum(b.id, b.content, b.date, this.resp);
-					return;
-				}else {
-					this.resp.end(JSON.stringify({message: "long"}));
-				}
-			}
-			else if(b.ac == "get-content"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.get_message_forum(this.resp);
-				return;	
-			}
-				else if(b.ac == "get-id-chat"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.get_id_chat(this.resp);
-				return;	
-			}
-/*+++++++++++++++++++++++++++++++++++++++++ADMIN++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-			/*+++++++++++++++++++++++++++++++++++++++++on recup les id+++++++++++++++++++++++++*/
-			else if(b.ac == "get-content2"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.get_id_admin(this.resp);
-				//console.log("router");
-				return;
-			}
-			/*++++++++++++++++++++++++++++set un compte en admin ou en normal ou en suspend+++++++++++++++++++++++++*/
-			else if (b.ac == "set-account-admin"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.set_account_admin(b.id, b.statue, this.resp);
-				return;
-			}
-/*================pour supprimer un cookie ++++++++++++++++++++++++++++++++++++++++*/
-			else if (b.ac == "delete-cookie"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.delete_cookie(this.req.headers.cookie, this.resp);
-				return;
-			}
-
-		
-
-/*+++++++++++++++++++++++++++POUR LA PAGE SETTINGS+++++++++++++++++++++++++++++*/
-	
-			// on envoie à la db via le cookie, le mdp récupérer dans settings.html via settings.js
-			else if (b.ac == "change-mdp") {
-			this.resp.writeHead(200,{"Content-Type": "application/json" });
-				db.change_mdp(this.req.headers.cookie, b.password, b.npassword, this.resp);
-				return;
-			// DONE Récupérer dans la db, le mdp selon l'id présent ds le cookie
-			
-			}
-			
-			// on envoie à la db via le cookie, l'email récupérer dans settings.html via settings.js
-			else if (b.ac == "change-email") {
-			this.resp.writeHead(200,{"Content-Type": "application/json" });
-				db.change_email(this.req.headers.cookie, b.email, b.pw, this.resp);
-				return;
+				db.logout_account_user(this.req.headers.cookie, this.resp);	
+				return;			
 			}else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.delete_account_user(this.req.headers.cookie, this.resp);
