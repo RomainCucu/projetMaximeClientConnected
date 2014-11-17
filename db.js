@@ -11,7 +11,7 @@ RETOURNE JE NE SAIS PLUS QUOI DONC A REMPLI
 ####################################
 */
 exports.afficher_toute_la_base = function(){
-MongoClient.connect('mongodb://alexandre:magne@dogen.mongohq.com:10036/ProjetEsme', function(err, db) {
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
     if(err) throw err;//si erreur de connections
 	
 	 var collection = db.collection('test1');//on veut acceder à la collection test 1 de la db ProjetEsme
@@ -30,7 +30,7 @@ exports.login=function(username, pwd, res){
 /*
 Fonction pour le bouton login, pour se connecter avec un identifiant et un mot de passe
 */
-MongoClient.connect('mongodb://alexandre:magne@dogen.mongohq.com:10036/ProjetEsme', function(err, db) {
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
 						throw err;
 						res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
@@ -79,7 +79,7 @@ exports.valid_cookie = function(c,obj,fct){
 	avec cookie.value dans la DB USERS
 	*/
 	if (c){
-				MongoClient.connect('mongodb://alexandre:magne@dogen.mongohq.com:10036/ProjetEsme', function(err, db) {
+				MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 				    if(err) throw err;	
 					var collection = db.collection('users');//pour aller choper le cookie dans la db
 					c = c.split("cookieName=");//car c ="GA=iyiuyeuiyizeu ; cookieName=rom19282839" par excemple donc on eneleve le cookieName
