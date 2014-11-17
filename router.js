@@ -234,23 +234,11 @@ cb_cookie:
 			this.resp.writeHead(200,{"Content-Type": "application/json" });
 				db.change_email(this.req.headers.cookie, b.email, b.pw, this.resp);
 				return;
-			}
-			
-			// on envoie à la db via le cookie, le mdp récupérer dans settings.html via settings.js
-			else if (b.ac == "delete-account") {
-			this.resp.writeHead(200,{"Content-Type": "application/json" });
-				db.delete_account(this.req.headers.cookie, b.pwd, this.resp);
-				return;
-			} else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
+			}else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.delete_account_user(this.req.headers.cookie, this.resp);
 				return;
 			}
-			
-			
-		
-		
-		/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 		}
 				
 		util.log("INFO - Action not found : " + b.ac);

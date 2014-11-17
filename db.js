@@ -129,16 +129,14 @@ collection.find({"cookie.value": c[1]}).toArray(function(err, results) {
 
 exports.delete_account_user = function (cookie_header, res){
 	
-	var m = cookie_header.split("cookieName=");
-	console.log(m);
+	var m = cookie_header.split("cookieName=");	
 
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
 				console.log(error);
 				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
 			}
-	else{
-		console.log(m[1]);
+	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.remove({"cookie.value": m[1]},function(err, doc){
 			if(err){

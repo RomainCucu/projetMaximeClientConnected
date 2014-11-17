@@ -76,6 +76,7 @@ index.callback = function () {
 			index.mettre_les_cases_en_rouges_du_formulaire("boites_pour_entrer_les_login_");
 			alert("Erreur de connexion");
 		}else if (r.message == "register_length_problem_username_"){
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			alert("username compris entre 3 et 15 caract SVP");
 		}else if(r.message=="username_existant_"){
 			alert("username existant");

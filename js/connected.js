@@ -8,6 +8,7 @@ var connected = {};
 var data = {};
 
 connected.start=function(){
+
 	document.addEventListener('click', connected.on_click_function_);
 };
 
@@ -40,11 +41,11 @@ connected.post = function (data, callback) {
 
 connected.callback = function () {
 	if (this.readyState == 4 && this.status == 200) {
-	console.log("this.responsetext :" + this.responseText);
-	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
 
-	if (r.message=="acount_deleted"){
-		window.location = "../connected.html";
+	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+	console.log(r);
+	if (r.message=="account_deleted"){
+		window.location = "../index.html";
 	}else if (r.message=="error_delete_account"){
 		alert("Erreur de suppression du compte");
 	}else{
