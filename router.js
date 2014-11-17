@@ -61,7 +61,7 @@ get_method:
 		this.pathname = this.pathname.splice(1, this.pathname.length - 1); this.filetype = this.pathname[this.pathname.length - 1].split(".");
 		this.filetype = this.filetype[this.filetype.length - 1];
 		this.path = "." + u.path; //the website in the same directory than the node server
-		console.log(this.path);
+		//console.log(this.path);
 		if (u.path == "/html/connected.html")//pour voir dans quel page on va
 			{				
 				db.valid_cookie(this.req.headers.cookie, this, "check_user"); // on verifie si c un user (si oui il accede aux pages ou il faut être admin sinon on le redirige sur la page d'accueil)
@@ -167,7 +167,7 @@ cb_cookie:
 				
 		util.log("INFO - Action not found : " + b.ac);
 		//this.resp.writeHead(501, {"Content -Type": "application/json"});
-		this.resp.end(JSON.stringify({message: "nocookie"}));
+		this.resp.end('<p>Non connect&eacute</p><A HREF="../../index.html">Cliquer pour aller au menu principal</A><script>window.onload=function(){setTimeout(function(){window.location="../../index.html"},2000)}</script>');
 		
 	},
 
