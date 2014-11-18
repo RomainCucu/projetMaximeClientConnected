@@ -102,7 +102,7 @@ go_post:
 		if (b.ac == "check_login_process_") {
 			//this.resp.writeHead(200,{"Content-Type": "application/json" }); en commentaire car pas présent dans le router du projet ligotdor
 			if (verification_data_entrantes.check_register_ingo(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
-				db.login(b.userName, b.password, this.resp);
+				db.login(b.username, b.password, this.resp);
 			}else{
 				this.resp.end(JSON.stringify({message: "else"}));
 			}			

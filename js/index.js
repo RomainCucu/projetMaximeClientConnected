@@ -49,7 +49,7 @@ index.btn_check_login_formular_ = function(){
 index.fill_data_login = function(){
 	//pour remplir l'objet data avec le username et password et l'action à réaliser
 	data.ac = "check_login_process_"; // action a traité pour le routeur
-	data.userName = document.getElementById('input_username_').value.toLowerCase();
+	data.username = document.getElementById('input_username_').value.toLowerCase();
 	data.password = document.getElementById('input_password_').value;
 };
 
