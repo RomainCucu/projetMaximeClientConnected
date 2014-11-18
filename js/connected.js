@@ -40,7 +40,6 @@ connected.btn_submit_status_=function(){
 		if(document.getElementById('status_user').value != ""){
 			connected.fill_data_status();
 			connected.post(data, connected.callback);
-			console.log("on envoie au router maggle");
 		}
 	});
 };
@@ -147,13 +146,11 @@ connected.callback = function () {
 			console.log("amis supprimés");
 			connected.show_frient_list();
 		}else if(r.message=="tab_status_added"){
-			console.log("status ajouté avec succes !");
+			alert("status ajouté avec succes !");
 		}else if(r.message=="to_short"){
 			alert("Status vide");
 		}else if(r.message=="status_update"){
-			connected.display_status(r);				
-		}else if(r.message="okokok"){
-				connected.display_status(r);
+			connected.display_status(r.donnees);				
 		}else{
 			console.log("Erreur");
 		}
@@ -258,7 +255,6 @@ connected.display_status=function(r){
 						
 						
 						var newRow3 = document.createElement('TD');// pour creer une nouvelle colonne avec la date
-						console.log(r[i].date);
 						var newRowText3 = document.createTextNode((r[i].date_status));// qui contien la date	
 						newRow3.style.color ="purple";					
 						newRow3.appendChild(newRowText3);// on ajoute le texte à TD
@@ -314,6 +310,6 @@ window.onload = function(){
 		setTimeout(connected.start, 1);
 };
 
-window.setInterval(connected.get_status,20000);
+window.setInterval(connected.get_status,10000);
 
 

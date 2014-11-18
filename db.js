@@ -91,10 +91,11 @@ exports.get_status=function(res){
 							console.log(err);
 							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
 					}else{ 
-							results.message="status_update";
-							console.log(results);
-							console.log(results.length);
-							res.end(JSON.stringify(results)); 
+
+							var obj_a_transmettre={};
+							obj_a_transmettre.message="status_update";
+							obj_a_transmettre.donnees=results;
+							res.end(JSON.stringify(obj_a_transmettre)); 
 					}
 			});
 	}
@@ -121,6 +122,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							console.log(err);
 							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
 					}else if(results[0]){ // il a bien un cookie valide
+
 						username=results[0].username;
 						date_status = new Date();
 
@@ -128,8 +130,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							if(err){
 								res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
 							}else{
-								doc.message="status_added";
-								res.end(JSON.stringify(doc)); // conversion de l'objet JSON en string
+								console.log("on retourne");
+								res.end(JSON.stringify({message:"status_added"})); // conversion de l'objet JSON en string
 							}
 						});			
 					}							
