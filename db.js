@@ -131,7 +131,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 								res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
 							}else{
 								console.log("on retourne");
-								res.end(JSON.stringify({message:"status_added"})); // conversion de l'objet JSON en string
+								res.end(JSON.stringify({message:"tab_status_added"})); // conversion de l'objet JSON en string
 							}
 						});			
 					}							
