@@ -12,6 +12,7 @@ connected.start=function(){
 	document.addEventListener('click', connected.on_click_function_);//evenement on clique
 	connected.btn_search_a_user();//pour la rechearche d'users
 	connected.show_pseudo_();//pour afficher le pseudo
+	connected.show_frient_list();
 	connected.btn_delete_account_(); // pour supprimer le compte de l'user
 };
 
@@ -21,7 +22,11 @@ connected.on_click_function_ = function(ev){ // pour logout et masquer le popup 
 	if(id == "logout_link_"){
 		connected.post({ac:"log_out_account"}, connected.callback); //passage au router des données
 	}else if(src.className.indexOf("lien_ajout_ami")>-1){
+		connected.replace_content_by_animation_GIF_loader(id);//pour remplacer le bouton par un chargement
 		connected.post({ac:"add_friend_request",friend_to_add:id}, connected.callback); //passage au router des données
+	}else if(src.className.indexOf("lien_supp_ami")>-1){
+		connected.replace_content_by_animation_GIF_loader(id);//pour remplacer le bouton par un chargement
+		connected.post({ac:"delete_friend_request",friend_to_delete:id}, connected.callback); //passage au router des données
 	}
 	else{
 		$('#affichage_users_found_under_').popover('destroy'); // efface le popover quand on clique n'imp ou sur la page
@@ -50,6 +55,10 @@ connected.fill_data_ = function(){
 
 connected.show_pseudo_ = function(){
 	connected.post({ac:"pseudo_request_"}, connected.callback); //passage au router des données
+};
+
+connected.show_frient_list = function(){
+	connected.post({ac:"friend_list_request"}, connected.callback); //passage au router des données
 };
 
 connected.btn_search_a_user = function(){
@@ -97,12 +106,24 @@ connected.callback = function () {
 	}else if (r.message=="pseudo_request_failed"){
 		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant "no occurence found"
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-	}else if (r.message=="ajout_de_soi_meme"){		
+	}else if (r.message=="ajout_de_soi_meme"){
+		document.getElementById(contenuHTML.id).innerHTML = '<span class="text-danger">Vous ne pouvez pas vous ajoutez</span>';
 		console.log("tu t'ajoutes toi même");
 	}else if (r.message=="amis_not_ajouted_car_deja_present"){
+		document.getElementById(contenuHTML.id).innerHTML = '<span class="text-warning">Vous avez deja cet ami</span>';
 		console.log("tu as deja cet amis dans ta liste damis");
 	}else if (r.message=="amis_ajouted"){
+		connected.show_frient_list();
+		document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
 		console.log("amis ajouté avec succés");
+	}else if (r.message=="friends_found_"){
+		console.log("amis trouvés");
+		connected.afficher_friend_list_dans_html(r.friendList);
+	}else if(r.message == "none_friend_list_"){
+		document.getElementById("affichage_friend_list_").innerHTML = '<li class="list-group-item"><strong>No Friends Found</strong></li>'
+	}else if(r.message == "deletion_done_"){
+		console.log("amis supprimés");
+		connected.show_frient_list();
 	}else{
 		console.log("Erreur");
 	}
@@ -132,6 +153,15 @@ connected.replace_content_by_animation_GIF_loader = function(id){
 	/*var evt = document.createEvent("MouseEvents");
 	evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
 	document.getElementById("bt1").dispatchEvent(evt);*/
+};
+
+connected.afficher_friend_list_dans_html = function(tab){
+	var content_tmp="";
+	content_tmp='<li class="list-group-item"><strong>Your Friends</strong></li>';
+	for(i in tab){		
+		content_tmp+='<li class="list-group-item">'+tab[i]+'<a  class="lien_supp_ami glyphicon glyphicon-remove-sign" id="'+tab[i]+'-delete" style="color:red;"aria-hidden="true"></a>'+'</li>';
+	}
+	document.getElementById("affichage_friend_list_").innerHTML = content_tmp;
 };
 
 

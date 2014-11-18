@@ -166,6 +166,21 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
 				}
 				return;
+			}else if(b.ac == "friend_list_request"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				db.friend_list_request(this.req.headers.cookie, this.resp);
+				return;
+			}else if(b.ac == "delete_friend_request"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				b.friend_to_delete = b.friend_to_delete.replace(/ /g,"");//on supprim les espace
+				b.friend_to_delete = b.friend_to_delete.split('-');
+				b.friend_to_delete = b.friend_to_delete[0];
+				if(b.friend_to_delete.length>=1){
+					db.friend_to_delete(b.friend_to_delete,this.req.headers.cookie, this.resp);
+				}else{
+					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
+				}
+				return;
 			}
 		}
 				
