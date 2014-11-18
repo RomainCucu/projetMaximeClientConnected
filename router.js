@@ -170,7 +170,7 @@ cb_cookie:
 		}
 				
 		util.log("INFO - Action not found : " + b.ac);
-		//this.resp.writeHead(501, {"Content -Type": "application/json"});
+		this.resp.writeHead(501, {"Content -Type": "application/json"});
 		this.resp.end('<p>Non connect&eacute</p><A HREF="../../index.html">Cliquer pour aller au menu principal</A><script>window.onload=function(){setTimeout(function(){window.location="../../index.html"},2000)}</script>');
 		
 	},

@@ -73,7 +73,7 @@ connected.callback = function () {
 	else{
 		alert("Erreur");
 	}
-}
+}else if(this.status==501) window.location="../index.html"
 };
 
 window.onload = function(){
