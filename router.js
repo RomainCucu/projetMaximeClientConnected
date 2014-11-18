@@ -104,7 +104,7 @@ go_post:
 			if (verification_data_entrantes.check_register_ingo(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
 				db.login(b.username, b.password, this.resp);
 			}else{
-				this.resp.end(JSON.stringify({message: "else"}));
+				this.resp.end(JSON.stringify({message: "login_connexion_refused"}));
 			}			
 		}
 		
