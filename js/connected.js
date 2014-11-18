@@ -40,6 +40,7 @@ connected.btn_submit_status_=function(){
 		event.preventDefault();
 		if(document.getElementById('status_user').value != ""){
 			connected.fill_data_status();
+			connected.replace_content_by_animation_GIF_loader("btn_publish_statut");//pour remplacer le bouton par un chargement
 			connected.post(data, connected.callback);
 		}
 	});
@@ -148,9 +149,11 @@ connected.callback = function () {
 			console.log("amis supprimés");
 			connected.show_frient_list();
 		}else if(r.message=="tab_status_added"){
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			connected.get_status();
 			console.log("status ajouté avec succes !");
 		}else if(r.message=="to_short"){
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			console.log("Status vide");
 		}else if(r.message=="status_update"){
 			connected.display_status(r.donnees);				
