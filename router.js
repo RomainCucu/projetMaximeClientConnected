@@ -157,6 +157,15 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "search_name_length_too_short"}));
 				}
 				return;
+			}else if(b.ac == "add_friend_request"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				b.friend_to_add = b.friend_to_add.replace(/ /g,"");//on supprim les espace
+				if(b.friend_to_add.length>=1){
+					db.friend_to_add(b.friend_to_add,this.req.headers.cookie, this.resp);
+				}else{
+					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
+				}
+				return;
 			}
 		}
 				

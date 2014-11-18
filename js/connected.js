@@ -18,13 +18,16 @@ connected.start=function(){
 connected.on_click_function_ = function(ev){ // pour logout et masquer le popup de la recherche d'user
 	var src = ev.target;
 	var id = src.id;
-
 	if(id == "logout_link_"){
 		connected.post({ac:"log_out_account"}, connected.callback); //passage au router des données
-	}else{
+	}else if(src.className.indexOf("lien_ajout_ami")>-1){
+		connected.post({ac:"add_friend_request",friend_to_add:id}, connected.callback); //passage au router des données
+	}
+	else{
 		$('#affichage_users_found_under_').popover('destroy'); // efface le popover quand on clique n'imp ou sur la page
 	}
 };
+
 
 connected.btn_delete_account_ = function(){
 	$( "#delete_account_confirm" ).submit( function(event){
@@ -91,21 +94,26 @@ connected.callback = function () {
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 	}else if(r.message=="search_name_length_too_short"){
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-	}else if (r.message="pseudo_request_failed"){
+	}else if (r.message=="pseudo_request_failed"){
 		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant "no occurence found"
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+	}else if (r.message=="ajout_de_soi_meme"){		
+		console.log("tu t'ajoutes toi même");
+	}else if (r.message=="amis_not_ajouted_car_deja_present"){
+		console.log("tu as deja cet amis dans ta liste damis");
+	}else if (r.message=="amis_ajouted"){
+		console.log("amis ajouté avec succés");
+	}else{
+		console.log("Erreur");
 	}
-	else{
-		alert("Erreur");
-	}
-}else if(this.status==501) window.location="../index.html"
+	}else if(this.status==501) window.location="../index.html"
 };
 
 
 connected.show_user_under_search_bar = function(tab){	
 	var content_tmp="";
 	for(var i in tab){
-		content_tmp+= "<p>"+tab[i]+"</p>";
+		content_tmp+= "<p>"+tab[i]+" "+'<a  class="lien_ajout_ami glyphicon glyphicon-plus-sign" id="'+tab[i]+'" style="color:green;"aria-hidden="true"></a>'+"</p>";
 	}
 	$('#affichage_users_found_under_').popover({
 		title : 'Resultat de la recherche',

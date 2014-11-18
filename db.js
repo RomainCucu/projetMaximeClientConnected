@@ -242,6 +242,55 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 });//conecct
 };
 
+exports.friend_to_add = function(friend_pseudo_to_add,cookie,res){
+friend_pseudo_to_add = ""+friend_pseudo_to_add;
+var m = cookie.split("cookieName=");
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+			util.log(err);
+			res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet}
+	}else{
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
+					if(err) {
+							console.log(err);
+							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+					}else if(results[0]){
+						if(friend_pseudo_to_add != results[0].pseudo){//pour pas s'ajouter soi meme
+							var tab;//varaiable contenant le tableau à transmettre
+							if (!results[0].friendList){//si l'user n'a pas damis
+								 tab = [];
+								tab.push(friend_pseudo_to_add);
+							}else{
+								tab = results[0].friendList;
+								if (tab.indexOf(friend_pseudo_to_add)> -1){//on regarde si l'ami n'est pas deja dans la friend list
+									res.end(JSON.stringify({message:"amis_not_ajouted_car_deja_present"})); // conversion de l'objet JSON en string
+								}else{
+									tab.push(friend_pseudo_to_add);
+									
+								}
+								
+							}							
+							collection.update({"cookie.value": m[1]},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
+								if(err) {
+									console.log(err);
+									res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+								}else{
+									res.end(JSON.stringify({message:"amis_ajouted"})); // conversion de l'objet JSON en string
+								}
+							});
+						}else{
+							res.end(JSON.stringify({message:"ajout_de_soi_meme"})); // conversion de l'objet JSON en string
+						}
+					}else{
+						res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+					}
+				});
+	}
+});//conect
+
+};
+
 function similar(a,b) {
     var lengthA = a.length;
     var lengthB = b.length;
