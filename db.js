@@ -216,7 +216,7 @@ exports.valid_cookie = function(c,obj,fct){
 				MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 				    if(err) {
 				    	console.log(err);
-				    	res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+				    	obj[fct](false);
 				    }
 					var collection = db.collection('users');//pour aller choper le cookie dans la db
 					c = c.split("cookieName=");//car c ="GA=iyiuyeuiyizeu ; cookieName=rom19282839" par excemple donc on eneleve le cookieName
