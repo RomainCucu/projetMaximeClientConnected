@@ -179,6 +179,7 @@ cb_cookie:
 					db.friend_to_delete(b.friend_to_delete,this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
+				}
 			}else if(b.ac=="add_status"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				if(b.status_user.length>=1){
