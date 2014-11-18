@@ -80,7 +80,7 @@ index.callback = function () {
 			alert("usernamen password length must be between 3 and 10 and only alphanumerical symbols please !");
 		}else if(r.message=="username_existant_"){
 			alert("username existant");
-						document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 		}else{
 			alert("demande  rejetée !");
 		}

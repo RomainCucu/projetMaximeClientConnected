@@ -6,6 +6,7 @@
 // DOCUMENT PARTIE SERVEUR 
 var connected = {};
 var data = {};
+var contenuHTML = {};//objet qui va contenir temporairement le code html (du bouton login par exemple)
 
 connected.start=function(){
 	document.addEventListener('click', connected.on_click_function_);//evenement on clique
@@ -37,6 +38,7 @@ connected.btn_search_a_user = function(){
 	$( "#search_form_" ).submit( function(event){
 	event.preventDefault();//à laisser
 	$('#affichage_users_found_under_').popover('destroy');
+	connected.replace_content_by_animation_GIF_loader("btn_search_a_user");
 	connected.post({ac:"search_user_request",search_name:document.getElementById("affichage_users_found_under_").value}, connected.callback); //passage au router des données	
 	//document.getElementById("affichage_users_found_under_").data-toggle="popover"
 	});
@@ -69,6 +71,7 @@ connected.callback = function () {
 		document.getElementById("showing_pseudo").innerHTML = "signed as "+r.pseudo;
 	}else if(r.message=="recherche_dutilisateurs_"){
 		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant les user pour afficher les user trouvé
+		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 	}
 	else{
 		alert("Erreur");
@@ -79,6 +82,7 @@ connected.callback = function () {
 window.onload = function(){
 		setTimeout(connected.start, 1);
 };
+
 
 connected.show_user_under_search_bar = function(tab){
 	console.log("kokkok");
@@ -93,5 +97,16 @@ connected.show_user_under_search_bar = function(tab){
 		placement : "bottom"
 	});
 	$('#affichage_users_found_under_').popover('show');
+};
+
+connected.replace_content_by_animation_GIF_loader = function(id){
+	contenuHTML.string = document.getElementById(id).innerHTML; // objet contenuHTML créé en haut du doc
+	contenuHTML.id = id;
+	document.getElementById(id).innerHTML = '<img src="../images/gif_loader/loading_connexion.gif" style="height:auto width:auto" >';
+	
+	// script qui simule l'evenement clique sur un bouton (ici celui qui lance le modal dans le fichier index.html
+	/*var evt = document.createEvent("MouseEvents");
+	evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	document.getElementById("bt1").dispatchEvent(evt);*/
 };
 
