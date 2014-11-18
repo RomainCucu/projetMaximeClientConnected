@@ -27,6 +27,95 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 });
 };
 
+/*
+exports.add_status_user=function(status_user, cookie, res){
+
+status_usr = status_user;
+var cookie = cookie.split("cookieName=");	
+
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				util.log(err);
+				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+			}
+	else{		
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+
+		
+			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
+					if(err) {
+							console.log(err);
+							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+					}else if(results[0]){
+						
+							var tab; // varaiable contenant de dernier pseudo a transmettre
+							if (!results[0].tab_status_date_pseudo){ // si l'user n'a pas de status (il n'existe pas)
+								username=results[0].username;
+								date_status=new Date();
+								tab = []; // on créé un tableau de tableau qui va contenir des status
+								tab_contents=[];
+								tab_contents.push(status_usr, username, date_status); // on ajoute dans ce tableau le status de l'user
+								tab.push(tab_contents);
+							}else{
+								tab = results[0].tab_status_date_pseudo; // on récupère tous ses pseudo dans un tableau
+								tab_contents=[];
+								tab_contents.push(status_usr, results[0].username, results[0].date_status);
+								tab.push(tab_contents); // on y ajoute le status courant de l'user
+							}	
+					}							
+							collection.update({"cookie.value": cookie[1]},{ $set: {tab_status_date_pseudo:tab}}, { upsert: true }, function(err, docs){
+								if(err) {
+									console.log(err);
+									res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+								}else{
+									res.end(JSON.stringify({message:"tab_status_added"})); // conversion de l'objet JSON en string
+								}
+							});		
+				});
+
+	}
+});
+};
+*/
+
+
+exports.add_status_user=function(status_user, cookie, res){
+
+status_usr = status_user;
+var cookie = cookie.split("cookieName=");	
+
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				util.log(err);
+				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+			}
+	else{		
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		var collection2 = db.collection('chatbox');
+		
+			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
+					if(err) {
+							console.log(err);
+							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+					}else if(results[0]){ // il a bien un cookie valide
+						username=results[0].username;
+						date_status = new Date();
+
+						collection2.insert({username: username, date_status: date_status, status_user:status_usr},function(err, doc){
+							if(err){
+								res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+							}else{
+								doc.message="status_added";
+								res.end(JSON.stringify(doc)); // conversion de l'objet JSON en string
+							}
+						});			
+					}							
+						
+				});
+	}
+});
+};
+
 exports.login=function(username, pwd, res){
 /*
 Fonction pour le bouton login, pour se connecter avec un identifiant et un mot de passe

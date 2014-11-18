@@ -14,6 +14,7 @@ connected.start=function(){
 	connected.show_pseudo_();//pour afficher le pseudo
 	connected.show_frient_list();
 	connected.btn_delete_account_(); // pour supprimer le compte de l'user
+	connected.btn_submit_status_(); // pour stocker un status de l'user
 };
 
 connected.on_click_function_ = function(ev){ // pour logout et masquer le popup de la recherche d'user
@@ -33,6 +34,21 @@ connected.on_click_function_ = function(ev){ // pour logout et masquer le popup 
 	}
 };
 
+connected.btn_submit_status_=function(){
+	$("#submit_status_user").submit(function(event){
+		event.preventDefault();
+		if(document.getElementById('status_user').value != ""){
+			connected.fill_data_status();
+			connected.post(data, connected.callback);
+			console.log("on envoie au router maggle");
+		}
+	});
+};
+
+connected.fill_data_status=function(){
+	data.ac = "add_status";
+	data.status_user=document.getElementById('status_user').value;
+};
 
 connected.btn_delete_account_ = function(){
 	$( "#delete_account_confirm" ).submit( function(event){
@@ -124,9 +140,14 @@ connected.callback = function () {
 	}else if(r.message == "deletion_done_"){
 		console.log("amis supprimés");
 		connected.show_frient_list();
+	}else if(r.message="tab_status_added"){
+		console.log("status ajouté avec succes !");
+	}else if(r.message="to_short"){
+		alert("Status vide");
 	}else{
 		console.log("Erreur");
 	}
+
 	}else if(this.status==501) window.location="../index.html"
 };
 
