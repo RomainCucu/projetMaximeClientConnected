@@ -73,7 +73,7 @@ connected.callback = function () {
 		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant les user pour afficher les user trouvé
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 	}else if(r.message=="search_name_length_too_short"){
-
+		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 	}
 	else{
 		alert("Erreur");
