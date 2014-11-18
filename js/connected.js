@@ -23,6 +23,8 @@ connected.on_click_function_ = function(ev){
 	}else if(id == "delete_account_"){
 		connected.fill_data_();
 		connected.post(data, connected.callback); //passage au router des données
+	}else{
+		$('#affichage_users_found_under_').popover('destroy');
 	}
 };
 
