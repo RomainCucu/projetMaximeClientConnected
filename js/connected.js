@@ -83,13 +83,8 @@ connected.callback = function () {
 }else if(this.status==501) window.location="../index.html"
 };
 
-window.onload = function(){
-		setTimeout(connected.start, 1);
-};
 
-
-connected.show_user_under_search_bar = function(tab){
-	console.log("kokkok");
+connected.show_user_under_search_bar = function(tab){	
 	var content_tmp="";
 	for(var i in tab){
 		content_tmp+= "<p>"+tab[i]+"</p>";
@@ -113,4 +108,11 @@ connected.replace_content_by_animation_GIF_loader = function(id){
 	evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
 	document.getElementById("bt1").dispatchEvent(evt);*/
 };
+
+
+window.onload = function(){
+		setTimeout(connected.start, 1);
+};
+
+
 
