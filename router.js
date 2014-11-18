@@ -107,10 +107,10 @@ go_post:
 		
 		else if (b.ac == "register"){
 			this.resp.writeHead(200,{"Content -Type": "application/json"});
-			if (b.username.length >= 3 && b.username.length < 15){
+			if (verification_data_entrantes.check_register_ingo(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
 				db.register(b.username, b.password, this.resp);
 			}else {
-				this.resp.end(JSON.stringify({message: "register_length_problem_username_"}));
+				this.resp.end(JSON.stringify({message: "register_problem_info_entered"}));
 			}
 			
 		}else if (b.ac == "envoie_demande_de_pret_individuelle_") {	
@@ -231,20 +231,12 @@ function () {
 
 // Pour vérifier les données entrante
 
-verification_data_entrantes.check_data_loan_demand_individual_client_ = function(data){
-	/*
-	Fonction qui prend l'objet transmis par le client
-	VERIFICATION : 
-	1) on regarde si les champs existent (HTML5 renvoi un champ vide si une lettre est transmise, par exemple sur iphone, 
-											qunant tu fais une erreur dans le formulaire, ca envoi quand meme, et si c un caractere autre que chiffre
-											ca envoie un champ vide)
-	2) on regarde si les champs sont composés que de chiffres
-	3) on retourne vrai si le regexp passe et faux sinon
-	*/
-	regex = new RegExp("^[0-9]+$");//regexp pour que des chiffre ET pas vide ou pas espace
-	if(data.input_duration_loan_in_years_ && data.input_annual_incomes_ && data.input_age_of_demander_&& data.input_borrowed_capital_){
-		var stringAtester = ""+data.input_duration_loan_in_years_+data.input_annual_incomes_+data.input_age_of_demander_+data.input_borrowed_capital_;
-		return regex.test(stringAtester);	
+verification_data_entrantes.check_register_ingo = function(data){
+var reg = new RegExp(/^\w+$/);
+data.username = data.username.replace(/ /g,"");
+data.password = data.password.replace(/ /g,"");
+	if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
+		return true;
 	}else return false;	
 };
 

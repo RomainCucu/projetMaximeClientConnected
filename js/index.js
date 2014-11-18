@@ -75,9 +75,9 @@ index.callback = function () {
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			index.mettre_les_cases_en_rouges_du_formulaire("boites_pour_entrer_les_login_");
 			alert("Erreur de connexion");
-		}else if (r.message == "register_length_problem_username_"){
+		}else if (r.message == "register_problem_info_entered"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-			alert("username compris entre 3 et 15 caract SVP");
+			alert("usernamen password length must be between 3 and 10 and only alphanumerical symbols please !");
 		}else if(r.message=="username_existant_"){
 			alert("username existant");
 						document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
