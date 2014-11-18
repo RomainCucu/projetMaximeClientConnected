@@ -48,6 +48,7 @@ connected.btn_submit_status_=function(){
 connected.fill_data_status=function(){
 	data.ac = "add_status";
 	data.status_user=document.getElementById('status_user').value;
+	console.log(data.status_user);
 };
 
 connected.btn_delete_account_ = function(){
@@ -193,7 +194,7 @@ connected.callback = function () {
 								
 								
 								
-			for(i=lengthr-1; i>lengthr-20; i--) {// pour parcourir du plus récent au plus vieux
+			for(i=r.length-1; i>r.length-20; i--) {// pour parcourir du plus récent au plus vieux
 									
 					var newLine = document.createElement('TR'); // pour creer une nouvelle ligne qui contien id + message
 					newLine.style.height="30px";	
@@ -206,14 +207,14 @@ connected.callback = function () {
 				
 						var newRow1 = document.createElement('TD');// pour creer une nouvelle colonne avec l'id
 
-						var newRowText1 = document.createTextNode(r[0][i]);// qui contien lid						
+						var newRowText1 = document.createTextNode(r[i].username);// qui contien lid						
 						newRow1.appendChild(newRowText1);// on ajoute le texte à TD
 						newLine.appendChild(newRow1);// on ajoute TD à TR
 			
 						// pour les message
 					
 						// pour creer une nouvelle colonne avec le message
-						var str = r[1][i];
+						var str = r[i].status_user;
 						
 						if (str.length > 75){
 							var newRow2 = document.createElement('td');
@@ -248,7 +249,7 @@ connected.callback = function () {
 						
 						var newRow3 = document.createElement('TD');// pour creer une nouvelle colonne avec la date
 						console.log(r[2][i]);
-						var newRowText3 = document.createTextNode((r[2][i]));// qui contien la date	
+						var newRowText3 = document.createTextNode((r[i].date_status));// qui contien la date	
 						newRow3.style.color ="purple";					
 						newRow3.appendChild(newRowText3);// on ajoute le texte à TD
 						newLine.appendChild(newRow3);// on ajoute TD à TR
