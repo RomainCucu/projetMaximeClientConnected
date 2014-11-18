@@ -148,7 +148,7 @@ cb_cookie:
 				return;
 			}else if (b.ac == "search_user_request"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				b.search_name=b.search_name.replace(/ /g,"");				
+				b.search_name=b.search_name.replace(/ /g,"");//on supprim les espace
 				if(b.search_name.length>=1){
 					db.search_user_request(b.search_name,this.req.headers.cookie, this.resp);
 				}else{
