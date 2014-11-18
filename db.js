@@ -33,14 +33,14 @@ Fonction pour le bouton login, pour se connecter avec un identifiant et un mot d
 */
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-						throw err;
-						res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
+						util.log(err);
+						res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
 					}
 	
 	var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 	collection.find({username:username,password:pwd}).toArray( function(err, results){
 		if (err) {
-						throw err;
+						util.log(err);
 						res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
 					}
 		else if(results[0]){
@@ -52,7 +52,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				// MAJ BDD
 				collection.update({username: username, password: pwd},{ $set: {cookie:cookie}}, { upsert: true }, function(err, docs){
 					if(err) {
-						throw err;
+						util.log(err);
 						res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
 					}else{						
 										infos={};
@@ -78,8 +78,8 @@ pseudo = username;
 username = username.toLowerCase();
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-						throw err;
-						res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
+						util.log(err);
+						res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
 			}
 	else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
@@ -104,7 +104,10 @@ exports.valid_cookie = function(c,obj,fct){
 	*/
 	if (c){
 				MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
-				    if(err) throw err;	
+				    if(err) {
+				    	util.log(err);
+				    	res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+				    }
 					var collection = db.collection('users');//pour aller choper le cookie dans la db
 					c = c.split("cookieName=");//car c ="GA=iyiuyeuiyizeu ; cookieName=rom19282839" par excemple donc on eneleve le cookieName
 collection.find({"cookie.value": c[1]}).toArray(function(err, results) {
@@ -133,8 +136,8 @@ exports.delete_account_user = function (cookie_header, password_user, res){
 
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				console.log(error);
-				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
+				util.log(err);
+				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
@@ -158,10 +161,9 @@ exports.logout_account_user = function(cookie, res){
 var m = cookie.split("cookieName=");
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				console.log(error);
-				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
-			}
-	else{
+			util.log(err);
+			res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet}
+	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.update({"cookie.value": m[1]},{ $set: {cookie:0}}, { upsert: true }, function(err, docs){
 					if(err) {
@@ -182,10 +184,9 @@ exports.pseudo_request_ = function(cookie,res){
 var m = cookie.split("cookieName=");
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				console.log(error);
-				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
-			}
-	else{
+			util.log(err);
+			res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet}
+	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
 					if(err) {
@@ -207,10 +208,9 @@ exports.search_user_request = function(search_name,cookie,res){
 var m = cookie.split("cookieName=");
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				console.log(error);
-				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
-			}
-	else{
+			util.log(err);
+			res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet}
+	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find().toArray(function(err, results){
 					if(err) {

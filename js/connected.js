@@ -76,9 +76,10 @@ connected.callback = function () {
 	if (r.message=="account_deleted"){
 		window.location = "../index.html";
 	}else if (r.message=="error_delete_account"){
-		alert("Erreur de suppression du compte");
+		console.log("Erreur de suppression du compte");
 	}else if(r.message == "mauvais_pawssword"){
-		alert("Suppr impossible, mauvais mdp");
+		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+		console.log("Suppr impossible, mauvais mdp");
 	}else if (r.message=="logout_successful"){
 		window.location = "../index.html";
 	}else if (r.message=="log_out_failed"){
@@ -118,8 +119,7 @@ connected.show_user_under_search_bar = function(tab){
 connected.replace_content_by_animation_GIF_loader = function(id){
 	contenuHTML.string = document.getElementById(id).innerHTML; // objet contenuHTML créé en haut du doc
 	contenuHTML.id = id;
-	document.getElementById(id).innerHTML = '<img src="../images/gif_loader/loading_connexion.gif" style="height:auto width:auto" >';
-	
+	document.getElementById(id).innerHTML = '<img src="../images/gif_loader/loading_connexion.gif" style="height:auto width:auto" >';	
 	// script qui simule l'evenement clique sur un bouton (ici celui qui lance le modal dans le fichier index.html
 	/*var evt = document.createEvent("MouseEvents");
 	evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
