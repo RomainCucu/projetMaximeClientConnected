@@ -15,6 +15,7 @@ connected.start=function(){
 	connected.show_frient_list();
 	connected.btn_delete_account_(); // pour supprimer le compte de l'user
 	connected.btn_submit_status_(); // pour stocker un status de l'user
+	connected.get_status();
 };
 
 connected.on_click_function_ = function(ev){ // pour logout et masquer le popup de la recherche d'user
@@ -147,9 +148,10 @@ connected.callback = function () {
 			console.log("amis supprimés");
 			connected.show_frient_list();
 		}else if(r.message=="tab_status_added"){
-			alert("status ajouté avec succes !");
+			connected.get_status();
+			console.log("status ajouté avec succes !");
 		}else if(r.message=="to_short"){
-			alert("Status vide");
+			console.log("Status vide");
 		}else if(r.message=="status_update"){
 			connected.display_status(r.donnees);				
 		}else{
