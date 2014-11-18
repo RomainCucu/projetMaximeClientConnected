@@ -153,8 +153,6 @@ connected.callback = function () {
 			alert("Status vide");
 		}else if(r.message=="status_update"){
 			connected.display_status(r);				
-		}else if(r.message="okokok"){
-				connected.display_status(r);
 		}else{
 			console.log("Erreur");
 		}
