@@ -24,7 +24,7 @@ connected.on_click_function_ = function(ev){
 		connected.fill_data_();
 		connected.post(data, connected.callback); //passage au router des données
 	}else{
-		$('#affichage_users_found_under_').popover('destroy');
+		$('#affichage_users_found_under_').popover('destroy'); // efface le popover quand on clique n'imp ou sur la page
 	}
 };
 
@@ -37,7 +37,7 @@ connected.show_pseudo_ = function(){
 };
 
 connected.btn_search_a_user = function(){
-	$( "#search_form_" ).submit( function(event){
+	$( "#search_form_" ).submit( function(event){ // quand on clique sur le bouton search
 	event.preventDefault();//à laisser
 	$('#affichage_users_found_under_').popover('destroy');
 	connected.replace_content_by_animation_GIF_loader("btn_search_a_user");
@@ -76,6 +76,9 @@ connected.callback = function () {
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 	}else if(r.message=="search_name_length_too_short"){
 		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+	}else if (r.message="pseudo_request_failed"){
+		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant "no occurence found"
+		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 	}
 	else{
 		alert("Erreur");
@@ -90,7 +93,7 @@ connected.show_user_under_search_bar = function(tab){
 		content_tmp+= "<p>"+tab[i]+"</p>";
 	}
 	$('#affichage_users_found_under_').popover({
-		title : 'resultat de la recherche',
+		title : 'Resultat de la recherche',
 		html: true,
 		content : content_tmp,
 		placement : "bottom"

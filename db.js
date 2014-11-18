@@ -211,7 +211,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 		collection.find().toArray(function(err, results){
 					if(err) {
 						console.log(err);
-						res.end(JSON.stringify({message: "pseudo_request_failed"})); // on convertit le string en objet
+							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
 					}else{
 						var infos={};
 						infos.liste_user_found = [];
@@ -221,10 +221,17 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 								{
 									infos.liste_user_found.push(results[i].pseudo);
 								}
+
 						}
 						infos.message="recherche_dutilisateurs_"; // ajout d'un attribut message a l'objet pour gérer les cas dans index.jsr
+						if(infos.liste_user_found.length==0){
+							infos.liste_user_found.push("Not occurence founded");
+							infos.message="pseudo_request_failed";
+							res.end(JSON.stringify(infos))
+						} 
 						res.end(JSON.stringify(infos)); // conversion de l'objet JSON en string
 						db.close(); // on referme la db
+					
 					}
 				});
 	}
