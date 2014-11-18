@@ -1,12 +1,13 @@
 {
-  "name": "ProjetM2",
+  "name": "ProjetM2MaximeStatus",
   "version": "1.0.0",
   "description": "ProjetM2 ========",
   "main": "db.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
-  },"dependencies": {
+  },
+  "dependencies": {
     "mongodb": "x"
   },
   "repository": {
@@ -18,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/alexandremagne/ProjetM2/issues"
   },
-  "homepage": "https://github.com/alexandremagne/ProjetM2"
+  "homepage": "https://github.com/alexandremagne/ProjetM2",
+  "devDependencies": {}
 }
