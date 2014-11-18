@@ -130,7 +130,6 @@ go_post:
 
 cb_cookie:
 	function (ret) {
-	console.log('kokoko');
 		var b = this.b;
 		if (ret) {
 
