@@ -216,8 +216,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						var infos={};
 						infos.liste_user_found = [];
 						for(var i in results){
-							
-							if(results[i].pseudo.toLowerCase().indexOf(search_name.toLowerCase())> -1)//pour voir si la chaine est contenu dans un pseudo
+
+							if((results[i].pseudo.toLowerCase().indexOf(search_name.toLowerCase())> -1) || similar(results[i].pseudo.toLowerCase(),search_name.toLowerCase())> 50)//pour voir si la chaine est contenu dans un pseudo
 								{
 									infos.liste_user_found.push(results[i].pseudo);
 								}
@@ -229,5 +229,20 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				});
 	}
 });//conecct
+};
+
+function similar(a,b) {
+    var lengthA = a.length;
+    var lengthB = b.length;
+    var equivalency = 0;
+    var minLength = (a.length > b.length) ? b.length : a.length;    
+    var maxLength = (a.length < b.length) ? b.length : a.length;    
+    for(var i = 0; i < minLength; i++) {
+        if(a[i] == b[i]) {
+            equivalency++;
+        }
+    }
+    var weight = equivalency / maxLength;
+    return (weight * 100);
 };
 
