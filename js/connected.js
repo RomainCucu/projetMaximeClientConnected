@@ -13,6 +13,7 @@ connected.start=function(){
 	connected.btn_search_a_user();//pour la rechearche d'users
 	connected.show_pseudo_();//pour afficher le pseudo
 	connected.btn_delete_account_(); // pour supprimer le compte de l'user
+	connected.btn_submit_status_(); // pour stocker un status de l'user
 };
 
 connected.on_click_function_ = function(ev){ // pour logout et masquer le popup de la recherche d'user
@@ -28,6 +29,21 @@ connected.on_click_function_ = function(ev){ // pour logout et masquer le popup 
 	}
 };
 
+connected.btn_submit_status_=function(){
+	$("#submit_status_user").submit(function(event){
+		event.preventDefault();
+		if(document.getElementById('status_user').value != ""){
+			connected.fill_data_status();
+			connected.post(data, connected.callback);
+			console.log("on envoie au router maggle");
+		}
+	});
+};
+
+connected.fill_data_status=function(){
+	data.ac = "add_status";
+	data.status_user=document.getElementById('status_user').value;
+};
 
 connected.btn_delete_account_ = function(){
 	$( "#delete_account_confirm" ).submit( function(event){
@@ -103,9 +119,14 @@ connected.callback = function () {
 		console.log("tu as deja cet amis dans ta liste damis");
 	}else if (r.message=="amis_ajouted"){
 		console.log("amis ajouté avec succés");
+	}else if(r.message="tab_status_added"){
+		console.log("status ajouté avec succes !");
+	}else if(r.message="to_short"){
+		alert("Status vide");
 	}else{
 		console.log("Erreur");
 	}
+
 	}else if(this.status==501) window.location="../index.html"
 };
 

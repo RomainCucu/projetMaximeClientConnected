@@ -166,6 +166,14 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
 				}
 				return;
+			}else if(b.ac=="add_status"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				if(b.status_user.length>=1){
+					db.add_status_user(b.status_user, this.req.headers.cookie, this.resp);
+				} else {
+					this.resp.end(JSON.stringify({message: "to_short"}));
+				}
+				return;
 			}
 		}
 				
