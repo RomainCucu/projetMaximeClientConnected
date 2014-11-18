@@ -116,26 +116,7 @@ go_post:
 				this.resp.end(JSON.stringify({message: "register_problem_info_entered"}));
 			}
 			
-		}else if (b.ac == "envoie_demande_de_pret_individuelle_") {	
-			console.log("ENVOIE D'UNE DEMANDE DE PRET POUR INDIVIDUEL");
-			algo.calcul_autorisation(b.input_borrowed_capital_, b.input_age_of_demander_, b.input_annual_incomes_ , b.input_duration_loan_in_years_, this.resp); // voir le fichier algo.js			
-		}
-		
-		else if (b.ac == "get_charts_intraday") {
-			//data = fs.readFileSync("./data.js");
-			data = fs.readFileSync("./dataSG.json");
-			this.resp.writeHead(200,{"Content-Type": "application/json" });
-			this.resp.write(data);
-			this.resp.end();
-		}
-		else if (b.ac == "get_charts_sg") {
-			//data = fs.readFileSync("./data.js");
-			data = fs.readFileSync("./dataSG.json");
-			this.resp.writeHead(200,{"Content-Type": "application/json" });
-			this.resp.write(data);
-			this.resp.end();
-		}
-		else {
+		}else {
 			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
 			//console.log("======+++++++===="+ this);
 			//exports.valid_cookie = function (cookie, obj, cb) {
