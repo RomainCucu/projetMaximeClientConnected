@@ -186,7 +186,7 @@ connected.display_status=function(r){
 								newRow02.style.maxWidth="100px";
 							
 								
-								var newRowText02 = document.createTextNode('Pseudo'); // qui contient la chaine de caractere 'ID'
+								var newRowText02 = document.createTextNode('Statut'); // qui contient la chaine de caractere 'ID'
 								newRow02.appendChild(newRowText02); // On ajoute le titre à TD	
 								newLine1.appendChild(newRow02); // On ajoute 'TD' à 'TR'
 								
