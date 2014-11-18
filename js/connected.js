@@ -153,6 +153,8 @@ connected.callback = function () {
 			alert("Status vide");
 		}else if(r.message=="status_update"){
 			connected.display_status(r);				
+		}else if(r.message="okokok"){
+				connected.display_status(r);
 		}else{
 			console.log("Erreur");
 		}
@@ -257,7 +259,7 @@ connected.display_status=function(r){
 						
 						
 						var newRow3 = document.createElement('TD');// pour creer une nouvelle colonne avec la date
-						console.log(r[2][i]);
+						console.log(r[i].date);
 						var newRowText3 = document.createTextNode((r[i].date_status));// qui contien la date	
 						newRow3.style.color ="purple";					
 						newRow3.appendChild(newRowText3);// on ajoute le texte à TD
