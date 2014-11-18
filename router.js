@@ -148,7 +148,12 @@ cb_cookie:
 				return;
 			}else if (b.ac == "search_user_request"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.search_user_request(b.search_name,this.req.headers.cookie, this.resp);
+				b.search_name=b.search_name.replace(/ /g,"");
+				if(b.search_name.length>=1){
+					db.search_user_request(b.search_name,this.req.headers.cookie, this.resp);
+				}else{
+					this.resp.end(JSON.stringify({message: "search_name_length_too_short"}));
+				}
 				return;
 			}
 		}
