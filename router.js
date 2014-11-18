@@ -130,9 +130,10 @@ go_post:
 
 cb_cookie:
 	function (ret) {
-	
+	console.log('kokoko');
 		var b = this.b;
 		if (ret) {
+
 /*++++++++++++++++++++++++++++++++++++++++++++MY WALLET++++++++++++++++++++++++++++*/		
 			if (b.ac == "log_out_account"){
 				this.resp.writeHead(200,{"Content -Type": "application/json"});
@@ -170,7 +171,7 @@ cb_cookie:
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.friend_list_request(this.req.headers.cookie, this.resp);
 				return;
-			}else if(b.ac == "delete_friend_request"){
+			}else if(b.ac == "delete_friend_request"){				
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				b.friend_to_delete = b.friend_to_delete.replace(/ /g,"");//on supprim les espace
 				b.friend_to_delete = b.friend_to_delete.split('-');
@@ -184,20 +185,22 @@ cb_cookie:
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				if(b.status_user.length>=1){
 					db.add_status_user(b.status_user, this.req.headers.cookie, this.resp);
-				} else {
+				}else{
 					this.resp.end(JSON.stringify({message: "to_short"}));
 				}
 				return;
 			}else if(b.ac=="get_status"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.get_status(this.resp);
+			}else{
+				util.log("INFO - Action not found : " + b.ac);
+				this.resp.writeHead(501, {"Content -Type": "application/json"});
+				this.resp.end();
 			}
-		}
-				
-		util.log("INFO - Action not found : " + b.ac);
-		this.resp.writeHead(501, {"Content -Type": "application/json"});
-		this.resp.end('<p>Non connect&eacute</p><A HREF="../../index.html">Cliquer pour aller au menu principal</A><script>window.onload=function(){setTimeout(function(){window.location="../../index.html"},2000)}</script>');
-		
+		}else{
+			this.resp.writeHead(501, {"Content -Type": "application/json"});
+			this.resp.end();
+		}		
 	},
 
 		
