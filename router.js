@@ -182,7 +182,7 @@ cb_cookie:
 				}
 			}else if(b.ac=="add_status"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				if(b.status_user.length>=1){
+				if(b.status_user.length>=1 && b.status_user.length<150){
 					db.add_status_user(b.status_user, this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "to_short"}));
