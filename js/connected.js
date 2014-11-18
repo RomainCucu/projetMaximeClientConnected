@@ -12,24 +12,37 @@ connected.start=function(){
 	document.addEventListener('click', connected.on_click_function_);//evenement on clique
 	connected.btn_search_a_user();//pour la rechearche d'users
 	connected.show_pseudo_();//pour afficher le pseudo
+	connected.btn_delete_account_(); // pour supprimer le compte de l'user
 };
 
-connected.on_click_function_ = function(ev){
+connected.on_click_function_ = function(ev){ // pour logout et masquer le popup de la recherche d'user
 	var src = ev.target;
 	var id = src.id;
 
 	if(id == "logout_link_"){
 		connected.post({ac:"log_out_account"}, connected.callback); //passage au router des données
-	}else if(id == "delete_account_"){
-		connected.fill_data_();
-		connected.post(data, connected.callback); //passage au router des données
 	}else{
 		$('#affichage_users_found_under_').popover('destroy'); // efface le popover quand on clique n'imp ou sur la page
 	}
 };
 
+connected.btn_delete_account_ = function(){
+	$( "#delete_account_confirm" ).submit( function(event){
+	event.preventDefault(); // ne nous redirige pas vers une page pourri
+	if(document.getElementById('confim_password_to_delete').value != ""){
+		connected.fill_data_();		
+		connected.post(data, connected.callback);//passage au router des données
+		connected.replace_content_by_animation_GIF_loader("btn_del_usr");//pour remplacer le bouton par un chargement
+	}else{
+		alert("Please, enter a valid password");
+	}
+
+	});
+};
+
 connected.fill_data_ = function(){
 	data.ac = "delete_account";
+	data.password=document.getElementById('confim_password_to_delete').value;
 };
 
 connected.show_pseudo_ = function(){
@@ -60,11 +73,12 @@ connected.callback = function () {
 	if (this.readyState == 4 && this.status == 200) {
 
 	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-	console.log(r);
 	if (r.message=="account_deleted"){
 		window.location = "../index.html";
 	}else if (r.message=="error_delete_account"){
 		alert("Erreur de suppression du compte");
+	}else if(r.message == "mauvais_pawssword"){
+		alert("Suppr impossible, mauvais mdp");
 	}else if (r.message=="logout_successful"){
 		window.location = "../index.html";
 	}else if (r.message=="log_out_failed"){

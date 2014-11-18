@@ -127,7 +127,7 @@ collection.find({"cookie.value": c[1]}).toArray(function(err, results) {
 };
 
 
-exports.delete_account_user = function (cookie_header, res){
+exports.delete_account_user = function (cookie_header, password_user, res){
 	
 	var m = cookie_header.split("cookieName=");	
 
@@ -138,11 +138,15 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
-		collection.remove({"cookie.value": m[1]},function(err, doc){
+		collection.remove({"cookie.value": m[1], password:password_user},function(err, doc){
 			if(err){
 				res.end(JSON.stringify({message:"error_delete_account"})); // conversion de l'objet JSON en string
 			}else{
+				if(doc==0){ // user not found( mauvais mdp)
+					res.end(JSON.stringify({message:"mauvais_pawssword"})); // conversion de l'objet JSON en string
+				} else if(doc==1){ // suppression réussie
 				res.end(JSON.stringify({message:"account_deleted"}));
+				}
 			}
 		});
 	}

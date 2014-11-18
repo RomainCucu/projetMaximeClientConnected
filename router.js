@@ -140,8 +140,10 @@ cb_cookie:
 				return;			
 			}else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.delete_account_user(this.req.headers.cookie, this.resp);
-				return;
+				if(b.password!=""){
+					db.delete_account_user(this.req.headers.cookie, b.password, this.resp);
+					return;
+				} else this.resp.end(JSON.stringify({message: "error_delete_account"}));
 			}else if (b.ac == "pseudo_request_"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.pseudo_request_(this.req.headers.cookie, this.resp);
