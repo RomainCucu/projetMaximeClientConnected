@@ -151,8 +151,16 @@ connected.callback = function () {
 		}else if(r.message=="to_short"){
 			alert("Status vide");
 		}else if(r.message=="status_update"){
+			connected.display_status(r);				
+		}else{
+			console.log("Erreur");
+		}
+	}else if(this.status==501) window.location="../index.html"
+};
 
-				document.getElementById("show_status").innerHTML = ""; // On efface le contenu avant de recréer le chat
+
+connected.display_status=function(r){
+	document.getElementById("show_status").innerHTML = ""; // On efface le contenu avant de recréer le chat
 					
 						// pour le titre
 			
@@ -259,13 +267,8 @@ connected.callback = function () {
 						
 						document.getElementById("show_status").appendChild(newLine);
 						}
-						
-		}else{
-			console.log("Erreur");
-		}
-	}else if(this.status==501) window.location="../index.html"
-};
 
+};
 
 connected.show_user_under_search_bar = function(tab){	
 	var content_tmp="";
@@ -309,6 +312,6 @@ window.onload = function(){
 		setTimeout(connected.start, 1);
 };
 
-window.setInterval(connected.get_status,10000);
+window.setInterval(connected.get_status,20000);
 
 
