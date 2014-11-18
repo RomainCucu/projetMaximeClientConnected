@@ -78,6 +78,26 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 };
 */
 
+exports.get_status=function(res){
+	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				util.log(err);
+				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+			}
+	else{	
+			var collection = db.collection('chatbox');
+			collection.find({}).toArray(function(err, results){
+					if(err) {
+							console.log(err);
+							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+					}else if(results[0]){ 
+							console.log(results[0]);
+					}
+			});
+	}
+});
+};
+
 
 exports.add_status_user=function(status_user, cookie, res){
 

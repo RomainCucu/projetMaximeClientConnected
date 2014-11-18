@@ -188,6 +188,9 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "to_short"}));
 				}
 				return;
+			}else if(b.ac=="get_status"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				db.get_status(this.resp);
 			}
 		}
 				

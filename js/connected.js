@@ -64,6 +64,11 @@ connected.btn_delete_account_ = function(){
 	});
 };
 
+connected.get_status=function(){
+	data.ac = "get_status";
+	connected.post(data, connected.callback);//passage au router des données
+};
+
 connected.fill_data_ = function(){
 	data.ac = "delete_account";
 	data.password=document.getElementById('confim_password_to_delete').value;
@@ -100,54 +105,163 @@ connected.post = function (data, callback) {
 connected.callback = function () {
 	if (this.readyState == 4 && this.status == 200) {
 
-	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-	if (r.message=="account_deleted"){
-		window.location = "../index.html";
-	}else if (r.message=="error_delete_account"){
-		console.log("Erreur de suppression du compte");
-	}else if(r.message == "mauvais_pawssword"){
-		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-		console.log("Suppr impossible, mauvais mdp");
-	}else if (r.message=="logout_successful"){
-		window.location = "../index.html";
-	}else if (r.message=="log_out_failed"){
-		alert("Erreur de deconnexion du compte");
-	}else if (r.message=="pseudo_request_successfull"){
-		document.getElementById("showing_pseudo").innerHTML = "signed as "+r.pseudo;
-	}else if(r.message=="recherche_dutilisateurs_"){
-		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant les user pour afficher les user trouvé
-		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-	}else if(r.message=="search_name_length_too_short"){
-		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-	}else if (r.message=="pseudo_request_failed"){
-		connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant "no occurence found"
-		document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-	}else if (r.message=="ajout_de_soi_meme"){
-		document.getElementById(contenuHTML.id).innerHTML = '<span class="text-danger">Vous ne pouvez pas vous ajoutez</span>';
-		console.log("tu t'ajoutes toi même");
-	}else if (r.message=="amis_not_ajouted_car_deja_present"){
-		document.getElementById(contenuHTML.id).innerHTML = '<span class="text-warning">Vous avez deja cet ami</span>';
-		console.log("tu as deja cet amis dans ta liste damis");
-	}else if (r.message=="amis_ajouted"){
-		connected.show_frient_list();
-		document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
-		console.log("amis ajouté avec succés");
-	}else if (r.message=="friends_found_"){
-		console.log("amis trouvés");
-		connected.afficher_friend_list_dans_html(r.friendList);
-	}else if(r.message == "none_friend_list_"){
-		document.getElementById("affichage_friend_list_").innerHTML = '<li class="list-group-item"><strong>No Friends Found</strong></li>'
-	}else if(r.message == "deletion_done_"){
-		console.log("amis supprimés");
-		connected.show_frient_list();
-	}else if(r.message="tab_status_added"){
-		console.log("status ajouté avec succes !");
-	}else if(r.message="to_short"){
-		alert("Status vide");
-	}else{
-		console.log("Erreur");
-	}
+		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+		if (r.message=="account_deleted"){
+			window.location = "../index.html";
+		}else if (r.message=="error_delete_account"){
+			console.log("Erreur de suppression du compte");
+		}else if(r.message == "mauvais_pawssword"){
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+			console.log("Suppr impossible, mauvais mdp");
+		}else if (r.message=="logout_successful"){
+			window.location = "../index.html";
+		}else if (r.message=="log_out_failed"){
+			alert("Erreur de deconnexion du compte");
+		}else if (r.message=="pseudo_request_successfull"){
+			document.getElementById("showing_pseudo").innerHTML = "signed as "+r.pseudo;
+		}else if(r.message=="recherche_dutilisateurs_"){
+			connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant les user pour afficher les user trouvé
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+		}else if(r.message=="search_name_length_too_short"){
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+		}else if (r.message=="pseudo_request_failed"){
+			connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant "no occurence found"
+			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
+		}else if (r.message=="ajout_de_soi_meme"){
+			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-danger">Vous ne pouvez pas vous ajoutez</span>';
+			console.log("tu t'ajoutes toi même");
+		}else if (r.message=="amis_not_ajouted_car_deja_present"){
+			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-warning">Vous avez deja cet ami</span>';
+			console.log("tu as deja cet amis dans ta liste damis");
+		}else if (r.message=="amis_ajouted"){
+			connected.show_frient_list();
+			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
+			console.log("amis ajouté avec succés");
+		}else if (r.message=="friends_found_"){
+			console.log("amis trouvés");
+			connected.afficher_friend_list_dans_html(r.friendList);
+		}else if(r.message == "none_friend_list_"){
+			document.getElementById("affichage_friend_list_").innerHTML = '<li class="list-group-item"><strong>No Friends Found</strong></li>'
+		}else if(r.message == "deletion_done_"){
+			console.log("amis supprimés");
+			connected.show_frient_list();
+		}else if(r.message=="tab_status_added"){
+			console.log("status ajouté avec succes !");
+		}else if(r.message=="to_short"){
+			alert("Status vide");
+		}else if(r.message=="status_update"){
 
+				document.getElementById("show_status").innerHTML = ""; // On efface le contenu avant de recréer le chat
+					
+						// pour le titre
+			
+								var newLine1 = document.createElement('TR'); // pour creer une nouvelle ligne qui contiendra le titre "id" et "messages"
+		
+								// ID
+								var newRow01 = document.createElement('TH');// pour creer une nouvelle colonne avec le titre ID
+								
+								newRow01.style.width="100px";
+								newRow01.style.minWidth="100px";
+								newRow01.style.maxWidth="100px";
+								
+					
+								var newRowText01 = document.createTextNode('Pseudo'); // qui contient la chaine de caractere 'ID'
+								newRow01.appendChild(newRowText01); // On ajoute le titre à TD	
+								newLine1.appendChild(newRow01); // On ajoute 'TD' à 'TR'
+								
+								// Messages
+								var newRow02 = document.createElement('TH');// pour creer une nouvelle colonne avec le titre ID
+								newRow02.style.minWidth="50px";
+								newRow02.style.maxWidth="100px";
+							
+								
+								var newRowText02 = document.createTextNode('Pseudo'); // qui contient la chaine de caractere 'ID'
+								newRow02.appendChild(newRowText02); // On ajoute le titre à TD	
+								newLine1.appendChild(newRow02); // On ajoute 'TD' à 'TR'
+								
+								
+									// date
+								var newRow03 = document.createElement('TH');// pour creer une nouvelle colonne avec le titre ID
+								newRow03.style.minWidth="50px";
+								newRow03.style.maxWidth="100px";
+							
+								var newRowText03 = document.createTextNode('Date'); // qui contient la chaine de caractere 'ID'
+								newRow03.appendChild(newRowText03); // On ajoute le titre à TD	
+								newLine1.appendChild(newRow03); // On ajoute 'TD' à 'TR'
+								
+								document.getElementById("show_status").appendChild(newLine1); // On ajoute TR au tableau
+								
+								
+								
+			for(i=lengthr-1; i>lengthr-20; i--) {// pour parcourir du plus récent au plus vieux
+									
+					var newLine = document.createElement('TR'); // pour creer une nouvelle ligne qui contien id + message
+					newLine.style.height="30px";	
+							
+						if(i%2==0){
+							newLine.style.background="#eee";
+						}
+						
+						// pour les id
+				
+						var newRow1 = document.createElement('TD');// pour creer une nouvelle colonne avec l'id
+
+						var newRowText1 = document.createTextNode(r[0][i]);// qui contien lid						
+						newRow1.appendChild(newRowText1);// on ajoute le texte à TD
+						newLine.appendChild(newRow1);// on ajoute TD à TR
+			
+						// pour les message
+					
+						// pour creer une nouvelle colonne avec le message
+						var str = r[1][i];
+						
+						if (str.length > 75){
+							var newRow2 = document.createElement('td');
+						
+							var ell = str.substring(0,75);
+							var ell2 = str.substring(76, 150);
+							var newRowText2 = document.createTextNode(ell +"\n" + ell2);// qui contient le message					
+							newRow2.appendChild(newRowText2);// on ajoute le message à TD
+							
+							newLine.appendChild(newRow2);// on ajoute TD à TR
+							
+						}else{
+							var newRow2 = document.createElement('td');
+							var newRowText2 = document.createTextNode(str);// qui contient le message					
+							newRow2.appendChild(newRowText2);// on ajoute le message à TD
+							newLine.appendChild(newRow2);// on ajoute TD à TR
+						}
+						
+						
+						// Pour la date
+						/* var now = new Date();
+						var annee   = now.getFullYear();
+						var mois    = now.getMonth() + 1;
+						var jour    = now.getDate();
+						var heure   = now.getHours();
+						var minute  = now.getMinutes();
+						var seconde = now.getSeconds();
+	 
+						var DateDuJour = ("posté le "+jour+"/"+mois+"/"+annee+" à "+heure+" : "+minute+" : "+seconde+" :" );
+						// Résultat: Nous sommes le 2/11/2012 et il est 19 heure 57 minutes 37 secondes */
+						
+						
+						var newRow3 = document.createElement('TD');// pour creer une nouvelle colonne avec la date
+						console.log(r[2][i]);
+						var newRowText3 = document.createTextNode((r[2][i]));// qui contien la date	
+						newRow3.style.color ="purple";					
+						newRow3.appendChild(newRowText3);// on ajoute le texte à TD
+						newLine.appendChild(newRow3);// on ajoute TD à TR
+						
+						//on ajoute TR à table
+						
+						
+						document.getElementById("show_status").appendChild(newLine);
+						}
+						
+		}else{
+			console.log("Erreur");
+		}
 	}else if(this.status==501) window.location="../index.html"
 };
 
@@ -190,5 +304,6 @@ window.onload = function(){
 		setTimeout(connected.start, 1);
 };
 
+window.setInterval(connected.get_status,10000);
 
 
