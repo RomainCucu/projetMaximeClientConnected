@@ -162,7 +162,7 @@ connected.callback = function () {
 
 
 connected.display_status=function(r){
-	document.getElementById("show_status").innerHTML = ""; // On efface le contenu avant de recréer le chat
+	document.getElementById("show_status").innerHTML = " "; // On efface le contenu avant de recréer le chat
 					
 						// pour le titre
 			
