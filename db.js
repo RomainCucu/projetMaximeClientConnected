@@ -124,7 +124,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 						console.log(err);
 						res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
-					}
+	}else{
 	
 	var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 	collection.find({username:username,password:pwd}).toArray( function(err, results){
@@ -155,7 +155,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				res.end(JSON.stringify({message: "login_connexion_refused"})); // on convertit le string en objet
 			}					
 
-});
+			});
+}
 });	
 };
 
