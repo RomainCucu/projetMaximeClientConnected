@@ -177,12 +177,16 @@ connected.replace_content_by_animation_GIF_loader = function(id){
 };
 
 connected.afficher_friend_list_dans_html = function(tab){
-	var content_tmp="";
-	content_tmp='<li class="list-group-item"><strong>Your Friends</strong></li>';
-	for(i in tab){		
-		content_tmp+='<li class="list-group-item">'+tab[i]+'<a  class="lien_supp_ami glyphicon glyphicon-remove-sign" id="'+tab[i]+'-delete" style="color:red;"aria-hidden="true"></a>'+'</li>';
+	if(tab.length>0){
+		var content_tmp="";
+		content_tmp='<li class="list-group-item"><strong>Your Friends</strong></li>';
+		for(i in tab){		
+			content_tmp+='<li class="list-group-item">'+tab[i]+'<a  class="lien_supp_ami glyphicon glyphicon-remove-sign" id="'+tab[i]+'-delete" style="color:red;"aria-hidden="true"></a>'+'</li>';
+		}
+		document.getElementById("affichage_friend_list_").innerHTML = content_tmp;
+	}else{
+		document.getElementById("affichage_friend_list_").innerHTML = '<li class="list-group-item"><strong>None friends</strong></li>';
 	}
-	document.getElementById("affichage_friend_list_").innerHTML = content_tmp;
 };
 
 
