@@ -316,6 +316,6 @@ window.onload = function(){
 		setTimeout(connected.start, 1);
 };
 
-window.setInterval(connected.get_status,10000);
+window.setInterval(connected.get_status,1000);
 
 

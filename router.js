@@ -100,8 +100,8 @@ go_post:
 		b = JSON.parse(b);
 		this.b = b;
 		if (b.ac == "check_login_process_") {
-			//this.resp.writeHead(200,{"Content-Type": "application/json" }); en commentaire car pas présent dans le router du projet ligotdor
-			if (verification_data_entrantes.check_register_ingo(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
+			this.resp.writeHead(200,{"Content-Type": "application/json" });
+			if (verification_data_entrantes.check_info_caract_(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
 				db.login(b.username, b.password, this.resp);
 			}else{
 				this.resp.end(JSON.stringify({message: "login_connexion_refused"}));
@@ -110,18 +110,13 @@ go_post:
 		
 		else if (b.ac == "register"){
 			this.resp.writeHead(200,{"Content -Type": "application/json"});
-			if (verification_data_entrantes.check_register_ingo(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
+			if (verification_data_entrantes.check_info_caract_(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
 				db.register(b.username, b.password, this.resp);
 			}else {
 				this.resp.end(JSON.stringify({message: "register_problem_info_entered"}));
-			}
-			
+			}			
 		}else {
 			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
-			//console.log("======+++++++===="+ this);
-			//exports.valid_cookie = function (cookie, obj, cb) {
-			// /* stuff */
-			// obj[cb](true/false);
 		}
 		
 		
@@ -133,17 +128,18 @@ cb_cookie:
 		var b = this.b;
 		if (ret) {
 
-/*++++++++++++++++++++++++++++++++++++++++++++MY WALLET++++++++++++++++++++++++++++*/		
 			if (b.ac == "log_out_account"){
 				this.resp.writeHead(200,{"Content -Type": "application/json"});
 				db.logout_account_user(this.req.headers.cookie, this.resp);	
 				return;			
-			}else if(b.ac == "delete_account"){ // FONCTION QUE J'AI CREE LE 17/11/14 a 21h15
+			}else if(b.ac == "delete_account"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				if(b.password!=""){
 					db.delete_account_user(this.req.headers.cookie, b.password, this.resp);
 					return;
-				} else this.resp.end(JSON.stringify({message: "error_delete_account"}));
+				} else{
+					this.resp.end(JSON.stringify({message: "error_delete_account"}));	
+				} 
 			}else if (b.ac == "pseudo_request_"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.pseudo_request_(this.req.headers.cookie, this.resp);
@@ -173,7 +169,7 @@ cb_cookie:
 			}else if(b.ac == "delete_friend_request"){				
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				b.friend_to_delete = b.friend_to_delete.replace(/ /g,"");//on supprim les espace
-				b.friend_to_delete = b.friend_to_delete.split('-');
+				b.friend_to_delete = b.friend_to_delete.split('-');//l'id recu est de ce type "pseudo-delete"
 				b.friend_to_delete = b.friend_to_delete[0];
 				if(b.friend_to_delete.length>=1){
 					db.friend_to_delete(b.friend_to_delete,this.req.headers.cookie, this.resp);
@@ -182,7 +178,7 @@ cb_cookie:
 				}
 			}else if(b.ac=="add_status"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				if(b.status_user.length>=1 && b.status_user.length<150){
+				if(b.status_user.length>=1 && b.status_user.length<150){//status length entre 1 et 150 caract
 					db.add_status_user(b.status_user, this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "to_short"}));
@@ -258,10 +254,10 @@ function () {
 
 // Pour vérifier les données entrante
 
-verification_data_entrantes.check_register_ingo = function(data){
-var reg = new RegExp(/^\w+$/);
-data.username = data.username.replace(/ /g,"");
-data.password = data.password.replace(/ /g,"");
+verification_data_entrantes.check_info_caract_ = function(data){
+var reg = new RegExp(/^\w+$/);//regexp Alphanumeric
+data.username = data.username.replace(/ /g,"");//on retire les espaces
+data.password = data.password.replace(/ /g,"");//on retire les espace
 	if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
 		return true;
 	}else return false;	
