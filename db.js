@@ -37,7 +37,7 @@ exports.get_status=function(res){
 			}
 	else{	
 			var collection = db.collection('chatbox');
-			collection.find({}).sort({"date_status":-1}).limit(100).toArray(function(err, results){
+			collection.find({}).sort({"date_status":1}).limit(100).toArray(function(err, results){
 					if(err) {
 							console.log(err);
 							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
