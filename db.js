@@ -37,11 +37,45 @@ exports.get_status=function(c, res){
 					res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 				} else if (results1[0]){
 					r1=results1[0].friendList; 
-				if(r1){
-				if(r1.length>=1){
+				if(r1){ 
+				if(r1.length>=1){ // cool il a des amis
 
 				
+					var string_requete_db="";
+		
+					for(variable in r1){
+						string_requete_db +='{ "username": "' + r1[variable] + '" },';
+					}
 
+					var string_requete_finale = string_requete_db.substring(0,(string_requete_db.length -1 ));
+				
+					string_requete_finale="[" + string_requete_finale + "]";
+				
+					var objet_requete_db = JSON.parse(string_requete_finale);
+					
+					// ca nous sort tous les amis qui on publié un status
+					collection.find( { $or: objet_requete_db } ).sort({"date_status":-1}).toArray(function(err, results){
+							if(err){
+								console.log(err);
+								res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+							} else {
+
+								if(results[0]) {// si ya au moins un statut a afficher
+									
+											var obj_a_transmettre={};
+											obj_a_transmettre.message="status_update";
+											obj_a_transmettre.donnees=results.reverse();
+											res.end(JSON.stringify(obj_a_transmettre)); 
+								} else { // si ya 0 statut à afficher
+									res.end(JSON.stringify({message:"no_status_to_show"})); 
+								}
+							}
+					});
+					
+
+					// A LAISSER
+					
+/* //TROP GOURMAND EN RESSOURCE
 					collection.find({}).sort({"date_status":-1}).toArray(function(err, results){ // results est un tableau
 						if(err) {
 								console.log(err);
@@ -62,14 +96,15 @@ exports.get_status=function(c, res){
 								} else {
 										var obj_a_transmettre={};
 										obj_a_transmettre.message="status_update";
-										console.log(tab_status_friends);
+										//console.log(tab_status_friends);
 										obj_a_transmettre.donnees=tab_status_friends.reverse();
+										//console.log(JSON.stringify(obj_a_transmettre));
 										res.end(JSON.stringify(obj_a_transmettre)); 
 								}
 					
 						}
 					});
-
+*/
 				} }// if r1
 					else {
 						res.end(JSON.stringify({message:"no_friends"})); 

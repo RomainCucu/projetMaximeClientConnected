@@ -49,7 +49,6 @@ connected.btn_submit_status_=function(){
 connected.fill_data_status=function(){
 	data.ac = "add_status";
 	data.status_user=document.getElementById('status_user').value;
-	console.log(data.status_user);
 };
 
 connected.btn_delete_account_ = function(){
@@ -106,9 +105,7 @@ connected.post = function (data, callback) {
 
 connected.callback = function () {
 	if (this.readyState == 4 && this.status == 200) {
-
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-		console.log(r);
 		if (r.message=="account_deleted"){
 			window.location = "../index.html";
 		}else if (r.message=="error_delete_account"){
@@ -172,12 +169,12 @@ connected.display_status=function(r){
 	document.getElementById("show_status").innerHTML = " "; // On efface le contenu avant de recréer le chat
 					
 						// pour le titre
-
+							/*
 							console.log(r.length);
 							console.log(r);
 							console.log(r[0].username);
 							console.log(r[0].status_user);
-
+							*/
 			
 								var newLine1 = document.createElement('TR'); // pour creer une nouvelle ligne qui contiendra le titre "id" et "messages"
 		
