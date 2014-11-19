@@ -174,6 +174,10 @@ connected.display_status=function(r){
 						// pour le titre
 
 							console.log(r.length);
+							console.log(r);
+							console.log(r[0].username);
+							console.log(r[0].status_user);
+
 			
 								var newLine1 = document.createElement('TR'); // pour creer une nouvelle ligne qui contiendra le titre "id" et "messages"
 		
@@ -213,7 +217,7 @@ connected.display_status=function(r){
 								
 								
 								
-			for(i=r.length-1; i>r.length-20; i--) {// pour parcourir du plus récent au plus vieux
+			for(i=r.length-1; i>=0; i--) {// pour parcourir du plus récent au plus vieux
 									
 					var newLine = document.createElement('TR'); // pour creer une nouvelle ligne qui contien id + message
 					newLine.style.height="30px";	
@@ -322,6 +326,6 @@ window.onload = function(){
 		setTimeout(connected.start, 1);
 };
 
-window.setInterval(connected.get_status,10000);
+window.setInterval(connected.get_status,7000);
 
 
