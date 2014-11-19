@@ -190,7 +190,7 @@ cb_cookie:
 				return;
 			}else if(b.ac=="get_status"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.get_status(this.resp);
+				db.get_status(this.req.headers.cookie, this.resp);
 			}else{
 				util.log("INFO - Action not found : " + b.ac);
 				this.resp.writeHead(501, {"Content -Type": "application/json"});

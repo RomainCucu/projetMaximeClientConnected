@@ -29,27 +29,61 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 
 
-exports.get_status=function(res){
+exports.get_status=function(c, res){
 	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {	
 				util.log(err);
 				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
 			}
 	else{	
+			c = c.split("cookieName=");
 			var collection = db.collection('chatbox');
-			collection.find({}).sort({"date_status":-1}).limit(100).toArray(function(err, results){
-					if(err) {
-							console.log(err);
-							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
-					}else{ 
+			var collection2 = db.collection('users'); 
+			collection2.find({"cookie.value": c[1]}).toArray(function(err, results1){
+				if(err){
+					console.log(err);
+					res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+				} else if (results1[0]){
+					r1=results1[0].friendList; 
+				if(r1){
+				if(r1.length>=1){
 
-							var obj_a_transmettre={};
-							obj_a_transmettre.message="status_update";
-							obj_a_transmettre.donnees=results.reverse();
-							res.end(JSON.stringify(obj_a_transmettre)); 
-					}
+				
+
+					collection.find({}).sort({"date_status":-1}).toArray(function(err, results){ // results est un tableau
+						if(err) {
+								console.log(err);
+								res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+						}else { 
+
+								var tab_status_friends =[];
+								for(var i=0; i<r1.length; i++){
+									for(var j=0; j<results.length; j++){
+										if(results[j].username==r1[i]){
+											tab_status_friends.push(results[j]);
+										}
+									}
+								}
+
+								if(tab_status_friends.length<1){
+									res.end(JSON.stringify({message:"no_status_to_show"})); 
+								} else {
+										var obj_a_transmettre={};
+										obj_a_transmettre.message="status_update";
+										obj_a_transmettre.donnees=tab_status_friends.reverse();
+										res.end(JSON.stringify(obj_a_transmettre)); 
+								}
+					
+						}
+					});
+
+				} }// if r1
+					else {
+						res.end(JSON.stringify({message:"no_friends"})); 
+					}	
+				}
 			});
-	}
+		}
 });
 };
 
@@ -71,7 +105,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
 					if(err) {
 							console.log(err);
-							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}else if(results[0]){ // il a bien un cookie valide
 
 						username=results[0].username;
@@ -79,7 +113,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 						collection2.insert({username: username, date_status: date_status, status_user:status_usr},function(err, doc){
 							if(err){
-								res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+								res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 							}else{
 								res.end(JSON.stringify({message:"tab_status_added"})); // conversion de l'objet JSON en string
 							}
@@ -282,7 +316,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 		collection.find().toArray(function(err, results){
 					if(err) {
 						console.log(err);
-							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}else{
 						var infos={};
 						infos.liste_user_found = [];
@@ -321,7 +355,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
 					if(err) {
 							console.log(err);
-							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}else if(results[0]){
 						if(friend_pseudo_to_add != results[0].pseudo){//pour pas s'ajouter soi meme
 							var tab;//varaiable contenant le tableau à transmettre
@@ -341,7 +375,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							collection.update({"cookie.value": m[1]},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
 								if(err) {
 									console.log(err);
-									res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+									res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 								}else{
 									res.end(JSON.stringify({message:"amis_ajouted"})); // conversion de l'objet JSON en string
 								}
@@ -350,7 +384,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							res.end(JSON.stringify({message:"ajout_de_soi_meme"})); // conversion de l'objet JSON en string
 						}
 					}else{
-						res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+						res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}
 				});
 	}
@@ -369,7 +403,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
 					if(err) {
 							console.log(err);
-							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}else if(results[0]&&results[0].friendList){
 						res.end(JSON.stringify({message:"friends_found_",friendList:results[0].friendList})); // conversion de l'objet JSON en string
 					}else if(results[0] && !results[0].friendList){
@@ -394,7 +428,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
 					if(err) {
 							console.log(err);
-							res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}else if(results[0]){
 						if(results[0].friendList){
 							var array = results[0].friendList;
@@ -404,7 +438,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							    collection.update({"cookie.value": m[1]},{ $set: {friendList:array}}, { upsert: true }, function(err, docs){
 								if(err) {
 									console.log(err);
-									res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+									res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 								}else{
 									res.end(JSON.stringify({message:"deletion_done_"})); // conversion de l'objet JSON en string
 								}
@@ -417,7 +451,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						}
 					}
 					else{
-						res.end(JSON.stringify({message:"erreur de la db :("})); // conversion de l'objet JSON en string
+						res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
 					}
 	});
 	}

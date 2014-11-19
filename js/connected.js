@@ -157,6 +157,10 @@ connected.callback = function () {
 			console.log("Status vide");
 		}else if(r.message=="status_update"){
 			connected.display_status(r.donnees);				
+		}else if(r.message=="no_friends"){
+			document.getElementById("show_status").innerHTML = "Just new ? :) Please add some friends, to fill your status wall"
+		}else if(r.message=="no_status_to_show"){
+			document.getElementById("show_status").innerHTML = "Your friends didn't post status yet ! :/"
 		}else{
 			console.log("Erreur");
 		}
@@ -168,6 +172,8 @@ connected.display_status=function(r){
 	document.getElementById("show_status").innerHTML = " "; // On efface le contenu avant de recréer le chat
 					
 						// pour le titre
+
+							console.log(r.length);
 			
 								var newLine1 = document.createElement('TR'); // pour creer une nouvelle ligne qui contiendra le titre "id" et "messages"
 		
