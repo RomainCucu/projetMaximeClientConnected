@@ -293,7 +293,8 @@ Dans la DB, on se connecte à la db, et dans la collection USERS:
   - Si la friend liste n'existe pas (normalement peut pas être appeler, sauf si envoyer en console) => mesure de sécurité, renvoie message erreur
   - Si la friend liste existe
   	- Si le pseudo à supprimer n'est pas présent dans la friend list (impossible sauf si modif console) => mesure de sécurité, renvoie message erreur
-  	- Si le pseudo est dans la friend liste => on retire le pseudo du tableau et on met à jour le document avec la nouvelle frien list
+  	- Si le pseudo est dans la friend liste => on retire le pseudo du tableau et on met à jour le document avec la nouvelle friens list
+  	
 ##Côté router.js
 ```javascript
 else if(b.ac == "delete_friend"){				
