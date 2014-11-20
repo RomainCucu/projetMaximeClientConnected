@@ -7,11 +7,12 @@
 
 [pour écrire en .MD](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 #Organisation de la DataBase
-La database est de type MongoDB et est hosté sur Compose. Le seul module nécessaire est MongoDB.
+La database est de type MongoDB et est hostée sur Compose. Le seul module nécessaire est MongoDB.
 
-Notre database est organisé en deux collections qui sont:
+Notre database est organisée en deux collections qui sont:
+
 1. La collection *users*
-2. La collection *statusBox*
+2. La collection *statutBox*
 
 ###Dans la collection *users*
 Il y a un index unique sur le champs *username* afin qu'il n'y ait pas de doublon d'username.
@@ -23,7 +24,7 @@ La collection *users* comprend des documents composés de:
 - cookie: prend la valeur 0 lors de la déconnexion. Sinon comporte deux champs qui sont *value* (sa valeur) et *expire* (sa date d'expiration);
 - friendList: tableau qui contient les pseudos des amis.
 
-La collection *statusBox* comprend des documents composés de:
+La collection *statutBox* comprend des documents composés de:
 - id: id unique généré automatiquement par mongoDB;
 - username: username de l'utilisateur qui à publier le statut;
 - data_status: date de publication du statut;

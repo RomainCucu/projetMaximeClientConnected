@@ -29,7 +29,7 @@ exports.get_status=function(c, res){
 			}
 	else{	
 			c = c.split("cookieName=");
-			var collection = db.collection('statusBox');
+			var collection = db.collection('statutBox');
 			var collection2 = db.collection('users'); 
 			collection2.find({"cookie.value": c[1]}).toArray(function(err, results1){
 				if(err){
@@ -135,7 +135,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
-		var collection2 = db.collection('statusBox');
+		var collection2 = db.collection('statutBox');
 		
 			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
 					if(err) {
@@ -488,7 +488,7 @@ exports.get_status=function(res){
 				db.close(); // on referme la db
 			}
 	else{	
-			var collection = db.collection('statusBox');
+			var collection = db.collection('statutBox');
 			//on recherche les 100 derniers status postés.
 			collection.find({}).sort({"date_status":-1}).limit(100).toArray(function(err, results){
 					if(err) {
@@ -520,7 +520,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
-		var collection2 = db.collection('statusBox');
+		var collection2 = db.collection('statutBox');
 		
 			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
 					if(err) {
