@@ -173,7 +173,7 @@ exports.get_info=function(c, res){
 											var obj_a_transmettre={};
 											obj_a_transmettre.message="status_update";
 											obj_a_transmettre.donnees=results_analyse;
-											obj_a_transmettre.status_perso=status_perso[0].status_user;
+											obj_a_transmettre.status_perso=status_perso[0].status_user; // le status est tjrs le premier elmt du tab
 											res.end(JSON.stringify(obj_a_transmettre)); 
 								} else { // si ya 0 statut à afficher
 									res.end(JSON.stringify({message:"no_status_to_show"})); 
