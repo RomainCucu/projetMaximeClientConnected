@@ -106,6 +106,7 @@ connected.post = function (data, callback) {
 connected.callback = function () {
 	if (this.readyState == 4 && this.status == 200) {
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+		/*delete account*/
 		if (r.message=="account_deleted"){
 			window.location = "../index.html";
 		}else if (r.message=="error_delete_account"){
@@ -113,12 +114,15 @@ connected.callback = function () {
 		}else if(r.message == "mauvais_pawssword"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			console.log("Suppr impossible, mauvais mdp");
+		/*logout function*/
 		}else if (r.message=="logout_successful"){
 			window.location = "../index.html";
 		}else if (r.message=="log_out_failed"){
-			alert("Erreur de deconnexion du compte");
+			console.log("Erreur de deconnexion du compte");
+		/*affichage pseudo*/
 		}else if (r.message=="pseudo_request_successfull"){
 			document.getElementById("showing_pseudo").innerHTML = "signed as "+r.pseudo;
+		/*fonction recherche des users matchant la recherche*/
 		}else if(r.message=="recherche_dutilisateurs_"){
 			connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant les user pour afficher les user trouvé
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
@@ -130,6 +134,7 @@ connected.callback = function () {
 		}else if (r.message=="ajout_de_soi_meme"){
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-danger">Vous ne pouvez pas vous ajoutez</span>';
 			console.log("tu t'ajoutes toi même");
+		/*ajout amis*/
 		}else if (r.message=="amis_not_ajouted_car_deja_present"){
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-warning">Vous avez deja cet ami</span>';
 			console.log("tu as deja cet amis dans ta liste damis");
@@ -138,15 +143,18 @@ connected.callback = function () {
 			connected.post({ac:get_status}, connected.callback);//passage au router des données
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
 			console.log("amis ajouté avec succés");
+		/*fonction recuperation tu tableau d'ami*/
 		}else if (r.message=="friends_found_"){
 			console.log("amis trouvés");
 			connected.afficher_friend_list_dans_html(r.friendList);
 		}else if(r.message == "none_friend_list_"){
 			document.getElementById("affichage_friend_list_").innerHTML = '<li class="list-group-item"><strong>No Friends Found</strong></li>'
+		/*fonction delete amis*/
 		}else if(r.message == "deletion_done_"){
 			console.log("amis supprimés");
 			connected.show_frient_list();
 			connected.post(data, connected.callback);//passage au router des données
+		/*fonction ajout statut*/
 		}else if(r.message=="tab_status_added"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			connected.get_status();
@@ -154,6 +162,7 @@ connected.callback = function () {
 		}else if(r.message=="too_short_or_too_long"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			console.log("Status trop court ou trop long");
+		/*fonction recuperation des statuts*/
 		}else if(r.message=="status_update"){
 			connected.display_status(r.donnees);				
 		}else if(r.message=="no_friends"){
