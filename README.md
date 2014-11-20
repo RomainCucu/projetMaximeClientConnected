@@ -13,7 +13,7 @@ On récupère dans le router l'objet envoyé par le client composé des champs u
 Dans le router, si *verification_data_entrantes.check_info_caract_()* renvoie vraie, alors on envoie au router le username et le password.(CF: description *verification_data_entrantes.check_info_caract_()* tout en bas).
 
 Dans la DB, on se connecte à notre data base et on insère un document composé du champs username, pseudo, et password.
-Il faut savoir que l'on a crée un champs pseudo (comprenant majuscule et minuscule) et un champs username (en minuscule pour faciliter la fonction login)
+Il faut savoir que l'on a crée un champs pseudo (comprenant majuscule et minuscule pour afficher le pseudo aux autres en prenant en compte la casse) et un champs username (en minuscule pour faciliter la fonction login, pas de prise en charge de la casse)
 
 Si il n'y a pas d'erreur, on lance DIRECTEMENT la fonction login
 ##côté router.js
