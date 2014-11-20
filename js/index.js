@@ -48,7 +48,7 @@ index.btn_check_login_formular_ = function(){
 
 index.fill_data_login = function(){
 	//pour remplir l'objet data avec le username et password et l'action à réaliser
-	data.ac = "check_login_process_"; // action a traité pour le routeur
+	data.ac = "login"; // action a traité pour le routeur
 	data.username = document.getElementById('input_username_').value.toLowerCase();
 	data.password = document.getElementById('input_password_').value;
 };
@@ -71,7 +71,7 @@ index.callback = function () {
 		
 		if (r.message=="login_connexion_autorised_"){
 			window.location = "./html/connected.html";
-		}else if (r.message=="login_connexion_refused"){
+		}else if (r.message=="erreur_login_information_entrante"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			index.mettre_les_cases_en_rouges_du_formulaire("boites_pour_entrer_les_login_");
 			alert("Erreur de connexion");

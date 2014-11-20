@@ -99,9 +99,10 @@ go_post:
 	function (b) {
 		b = JSON.parse(b);
 		this.b = b;
-		if (b.ac == "check_login_process_") {
+		if (b.ac == "login") {
 			this.resp.writeHead(200,{"Content-Type": "application/json" });
-			if (verification_data_entrantes.check_info_caract_(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
+			if (verification_data_entrantes.check_info_caract_(b)){
+				//on regarde si les champs de l'objet ne contiennent pas de caracèrest spéciaux(eg: espace, crochets...) et sont de longueur entre 3 et 10 avant d'envoyer au router
 				db.login(b.username, b.password, this.resp);
 			}else{
 				this.resp.end(JSON.stringify({message: "login_connexion_refused"}));
@@ -110,7 +111,8 @@ go_post:
 		
 		else if (b.ac == "register"){
 			this.resp.writeHead(200,{"Content -Type": "application/json"});
-			if (verification_data_entrantes.check_info_caract_(b)){//voir si objet contient pas de caract spéciaux, espace, et longueur entre 3 et 10
+			if (verification_data_entrantes.check_info_caract_(b)){
+				//on regarde si les champs de l'objet ne contiennent pas de caracèrest spéciaux(eg: espace, crochets...) et sont de longueur entre 3 et 10 avant d'envoyer au router
 				db.register(b.username, b.password, this.resp);
 			}else {
 				this.resp.end(JSON.stringify({message: "register_problem_info_entered"}));
@@ -255,9 +257,12 @@ function () {
 // Pour vérifier les données entrante
 
 verification_data_entrantes.check_info_caract_ = function(data){
+data.username ="" + data.username;//on force l'info username à être un string
+data.password = "" + data.password;//on force l'info pwd à être un string
+data.username = data.username.replace(/ /g,"");//on retire les espaces du username
+data.password = data.password.replace(/ /g,"");//on retire les espace du pwd
 var reg = new RegExp(/^\w+$/);//regexp Alphanumeric
-data.username = data.username.replace(/ /g,"");//on retire les espaces
-data.password = data.password.replace(/ /g,"");//on retire les espace
+//on retourne vrai si chaque champs est compris entre 3 et 15 caractères et si c'est bien un alphaNumeric
 	if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
 		return true;
 	}else return false;	
