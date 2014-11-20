@@ -23,7 +23,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 exports.get_info=function(c, res){
 	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {	
-				console.log(err);
+				console.log("erreur fonction get_info connection: "+err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
 				return;
 			}
@@ -33,8 +33,9 @@ exports.get_info=function(c, res){
 			var collection2 = db.collection('users'); 
 			collection2.find({"cookie.value": c[1]}).toArray(function(err, results1){
 				if(err){
-					console.log(err);
+					console.log("erreur fonction get_info fonction find 1: "+err);
 					res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+					db.close();
 				} else if (results1[0]){
 					r1=results1[0].friendList; 
 				if(r1){ 
@@ -62,8 +63,9 @@ exports.get_info=function(c, res){
 						})
 						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).toArray(function(err, results){
 							if(err){
-								console.log(err);
+								console.log("erreur fonction get_info fonction find 2: "+err);
 								res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+								db.close();
 							} else {
 
 								if(results[0]) {// si ya au moins un statut a afficher
@@ -74,6 +76,7 @@ exports.get_info=function(c, res){
 											res.end(JSON.stringify(obj_a_transmettre)); 
 								} else { // si ya 0 statut à afficher
 									res.end(JSON.stringify({message:"no_status_to_show"})); 
+									db.close();
 								}
 							}
 					});
@@ -113,7 +116,8 @@ exports.get_info=function(c, res){
 */
 				} }// if r1
 					else {
-						res.end(JSON.stringify({message:"no_friends"})); 
+						res.end(JSON.stringify({message:"no_friends"}));
+						db.close();
 					}	
 				}
 			});
@@ -123,34 +127,34 @@ exports.get_info=function(c, res){
 
 
 exports.set_info=function(status_user, cookie, res){
-
-status_usr = status_user;
-var cookie = cookie.split("cookieName=");	
-
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				console.log(err);
+				console.log("erreur connexion fonction set_info: "+err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
 				return;
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		var collection2 = db.collection('statutBox');
-		
+		var cookie = cookie.split("cookieName=");
 			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
 					if(err) {
-							console.log(err);
+							console.log("erreur fonction set_info fonction find: "+err);
 							res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+							db.close(); // on referme la db
 					}else if(results[0]){ // il a bien un cookie valide
 
 						username=results[0].username;
 						date_status = new Date();
 
-						collection2.insert({username: username, date_status: date_status, status_user:status_usr},function(err, doc){
+						collection2.insert({username: username, date_status: date_status, status_user:status_user},function(err, doc){
 							if(err){
+								console.log("erreur fonction set_info fonction find: "+err);
 								res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+								db.close(); // on referme la db
 							}else{
 								res.end(JSON.stringify({message:"tab_status_added"}));
+								db.close(); // on referme la db
 							}
 						});			
 					}							
@@ -219,6 +223,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				db.close(); // on referme la db
 			}else{				
 				res.end(JSON.stringify({message:"register_ok_"}));
+				db.close(); // on referme la db
 			}
 		});
 	}
@@ -227,19 +232,18 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 
 exports.delete_ = function (cookie_header, password_user, res){
-	
-	var m = cookie_header.split("cookieName=");	
-
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				console.log(err);
+				console.log("erreur connexion fonction set_info: "+err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
 				return;
 			}
 	else{		
-		var collection = db.collection('users'); 
+		var collection = db.collection('users');
+		var m = cookie_header.split("cookieName=");	
 		collection.remove({"cookie.value": m[1], password:password_user},function(err, doc){
 			if(err){
+				console.log("erreur fonction delete fonction remove: "+err);
 				res.end(JSON.stringify({message:"error_delete_account"})); 
 				db.close(); // on referme la db
 			}else{

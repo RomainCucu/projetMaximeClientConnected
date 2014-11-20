@@ -68,6 +68,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				db.close(); // on referme la db
 			}else{				
 				res.end(JSON.stringify({message:"register_ok_"}));
+				db.close(); // on referme la db
 			}
 		});
 	}
