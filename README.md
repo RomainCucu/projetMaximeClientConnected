@@ -101,7 +101,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 }
 });	
 };
-```#Fonction logout
+```
+#Fonction logout
 ##Côté router.js
 ```javascript
 if (b.ac == "logout"){
