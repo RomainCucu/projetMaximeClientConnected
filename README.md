@@ -409,3 +409,71 @@ verification_data_entrantes.check_info_caract_ = function(data){
 		}else return false;	
 };
 ```
+/////////////////////////////////////////////////////////////
+
+#Fonction set_info
+##Description de la fonction
+Dans le router, on recois un objet avec un champs status_user. Il s'agit du status que l'utilisateur souhaite publier. En premier lieu, nous le forçon en string pour ensuite envoyer à la db ce status ainsi que le cookie du client.
+
+Dans la DB, on se connecte à la database.
+
+1. On recherche dans la collection user un document (la présence d'un user) en fonction de son cookieName : on récupère un objet results[0]
+	- Si results[0] n'existe pas, on renvoie un message d'erreur
+	- Si results[0] existe, on insert dans la collection statutbox un document contenant comme champs : username, la date du status et le status de l'user.
+	
+Remarque : results[0] contient les champs username, le status est récupéré lors de l'appel de la fonction et la date est généré lors de l'insertion du document dans la collection statutbox
+
+##Côté router.js
+```javascript
+else if(b.ac=="set_info"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				b.status_user += "";//forcer à string
+				b.status_user = b.status_user.replace(/ /g,"");//on supprime les espaces 
+				if(b.status_user.length>=1 && b.status_user.length<150){//status length entre 1 et 150 caract
+					db.set_info(b.status_user, this.req.headers.cookie, this.resp);
+				}else{
+					this.resp.end(JSON.stringify({message: "too_short_or_too_long"}));
+				}
+				return;
+			}
+```
+##Côté db.js
+```javascript
+exports.set_info=function(status_user, cookie, res){	
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+				console.log("erreur connexion fonction set_info: "+err);
+				res.end(JSON.stringify({message: "erreur_connection"}));
+				return;
+			}
+	else{		
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		var collection2 = db.collection('statutBox');
+		cookie = cookie.split("cookieName=");
+			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
+					if(err) {
+							console.log("erreur fonction set_info fonction find: "+err);
+							res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+							db.close(); // on referme la db
+					}else if(results[0]){ // il a bien un cookie valide
+
+						username=results[0].username;
+						date_status = new Date();
+
+						collection2.insert({username: username, date_status: date_status, status_user:status_user},function(err, doc){
+							if(err){
+								console.log("erreur fonction set_info fonction find: "+err);
+								res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+								db.close(); // on referme la db
+							}else{
+								res.end(JSON.stringify({message:"tab_status_added"}));
+								db.close(); // on referme la db
+							}
+						});			
+					}					
+				});
+	}
+});
+};
+
+```
