@@ -109,7 +109,7 @@ go_post:
 			}			
 		}
 		
-		else if (b.ac == "register"){
+		else if (b.ac == "register"){			
 			this.resp.writeHead(200,{"Content -Type": "application/json"});
 			if (verification_data_entrantes.check_info_caract_(b)){
 				//on regarde si les champs de l'objet ne contiennent pas de caracèrest spéciaux(eg: espace, crochets...) et sont de longueur entre 3 et 10 avant d'envoyer au router

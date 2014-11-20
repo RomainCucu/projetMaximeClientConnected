@@ -82,7 +82,7 @@ index.callback = function () {
 			alert("username existant");
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 		}else if(r.message == "register_ok_"){		
-			data.message = "login";
+			data.ac = "login";
 			index.post(data, index.callback);//passage au router des données
 		}
 		else{
