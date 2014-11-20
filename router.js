@@ -134,10 +134,10 @@ cb_cookie:
 				this.resp.writeHead(200,{"Content -Type": "application/json"});
 				db.logout_account_user(this.req.headers.cookie, this.resp);	
 				return;			
-			}else if(b.ac == "delete_account"){
+			}else if(b.ac == "delete"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				if(b.password!=""){
-					db.delete_account_user(this.req.headers.cookie, b.password, this.resp);
+					db.delete_(this.req.headers.cookie, b.password, this.resp);
 					return;
 				} else{
 					this.resp.end(JSON.stringify({message: "error_delete_account"}));	
@@ -155,11 +155,12 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "search_name_length_too_short"}));
 				}
 				return;
-			}else if(b.ac == "add_friend_request"){
-				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				b.friend_to_add = b.friend_to_add.replace(/ /g,"");//on supprim les espace
-				if(b.friend_to_add.length>=1){
-					db.friend_to_add(b.friend_to_add,this.req.headers.cookie, this.resp);
+			}else if(b.ac == "add_friend"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});				
+				b.friend_to_add += "";//pour le forcer à être un string
+				b.friend_to_add = b.friend_to_add.replace(/ /g,"");//on supprime les espaces 
+				if(b.friend_to_add.length>0){//si la taille du string est supérieur à 0 on recherche l'ami sinon ca vaut pas le coup
+					db.add_friend(b.friend_to_add,this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
 				}

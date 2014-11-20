@@ -98,3 +98,74 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 });	
 };
 ```
+#Fonction add_friend
+##Côté router.js
+```javascript
+else if(b.ac == "add_friend"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});				
+				b.friend_to_add += "";//pour le forcer à être un string
+				b.friend_to_add = b.friend_to_add.replace(/ /g,"");//on supprime les espaces 
+				if(b.friend_to_add.length>0){//si la taille du string est supérieur à 0 on recherche l'ami sinon ca vaut pas le coup
+					db.add_friend(b.friend_to_add,this.req.headers.cookie, this.resp);
+				}else{
+					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
+				}
+				return;
+			}
+```
+##Côté db.js
+```javascript
+exports.add_friend = function(friend_pseudo_to_add,cookie,res){
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {
+			console.log("erreur connexion fonction add_friend: "+err);
+			res.end(JSON.stringify({message: "erreur_connection"}));
+			return;
+	}else{
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		var m = cookie.split("cookieName=");//on split la valeur du cookie (eg:cookieName=rom19982790) car on veut que la deuxième partie
+		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
+					if(err) {
+							console.log("erreur fonction add_friend, fonction find: "+err);
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+							db.close(); // on referme la db
+					}else if(results[0]){//si on trouve un document associé au cookie
+						if(friend_pseudo_to_add != results[0].pseudo){//si la personne qui demande l'ajout n'est pas la personne qui ajoute
+							var tab;//varaiable contenant le tableau à transmettre
+							if (!results[0].friendList){//si l'user n'a pas damis
+								tab = [];//on creer un nouveau tableau avec l'user entré en paramètre
+								tab.push(friend_pseudo_to_add);
+							}else{//si luser a déjà une friend list
+								tab = results[0].friendList;//le tableau = le tableau de friend list trouvé dans la DB
+								if (tab.indexOf(friend_pseudo_to_add)> -1){//si l'ami est deja dans la friend list
+									res.end(JSON.stringify({message:"amis_not_ajouted_car_deja_present"}));
+									db.close(); // on referme la db
+								}else{
+									tab.push(friend_pseudo_to_add);//on rajoute l'ami dans le tableau							
+								}								
+							}
+							//l'user que l'on veut ajouter n'est ni SOI-M^ME ni déjà présent dans la friend list
+							//on met à jour le document avec le nouveau tableau d'amis			
+							collection.update({"cookie.value": m[1]},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
+								if(err) {
+									console.log("erreur fonction add_friend, fonction update: "+err);
+									res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+									db.close(); // on referme la db
+								}else{
+									res.end(JSON.stringify({message:"amis_ajouted"}));
+									db.close(); // on referme la db
+								}
+							});
+						}else{
+							res.end(JSON.stringify({message:"ajout_de_soi_meme"}));
+							db.close(); // on referme la db
+						}
+					}else{//normalement on rentre dans ce cas que si le mec change lui même las valeur du cookie
+						res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+						db.close(); // on referme la db
+					}
+				});
+	}
+});
+};
+```

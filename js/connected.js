@@ -25,7 +25,7 @@ connected.on_click_function_ = function(ev){ // pour logout et masquer le popup 
 		connected.post({ac:"log_out_account"}, connected.callback); //passage au router des données
 	}else if(src.className.indexOf("lien_ajout_ami")>-1){
 		connected.replace_content_by_animation_GIF_loader(id);//pour remplacer le bouton par un chargement
-		connected.post({ac:"add_friend_request",friend_to_add:id}, connected.callback); //passage au router des données
+		connected.post({ac:"add_friend",friend_to_add:id}, connected.callback); //passage au router des données
 	}else if(src.className.indexOf("lien_supp_ami")>-1){
 		connected.replace_content_by_animation_GIF_loader(id);//pour remplacer le bouton par un chargement
 		connected.post({ac:"delete_friend_request",friend_to_delete:id}, connected.callback); //passage au router des données
@@ -71,7 +71,7 @@ connected.get_status=function(){
 };
 
 connected.fill_data_ = function(){
-	data.ac = "delete_account";
+	data.ac = "delete";
 	data.password=document.getElementById('confim_password_to_delete').value;
 };
 
