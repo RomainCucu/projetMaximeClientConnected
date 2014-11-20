@@ -169,13 +169,14 @@ cb_cookie:
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.get_friends(this.req.headers.cookie, this.resp);
 				return;
-			}else if(b.ac == "delete_friend_request"){				
+			}else if(b.ac == "delete_friend"){				
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				b.friend_to_delete = b.friend_to_delete.replace(/ /g,"");//on supprim les espace
-				b.friend_to_delete = b.friend_to_delete.split('-');//l'id recu est de ce type "pseudo-delete"
+				b.friend_to_delete += "";//pour forcer à string
+				b.friend_to_delete = b.friend_to_delete.replace(/ /g,"");//on supprim les espaces
+				b.friend_to_delete = b.friend_to_delete.split('-');//l'id recu est de type "pseudo-delete"
 				b.friend_to_delete = b.friend_to_delete[0];
-				if(b.friend_to_delete.length>=1){
-					db.friend_to_delete(b.friend_to_delete,this.req.headers.cookie, this.resp);
+				if(b.friend_to_delete.length>0){//si le string n'est pas vide on va à la db
+					db.delete_friend(b.friend_to_delete,this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
 				}

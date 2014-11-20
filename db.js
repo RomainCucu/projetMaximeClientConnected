@@ -394,8 +394,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							res.end(JSON.stringify({message:"ajout_de_soi_meme"}));
 							db.close(); // on referme la db
 						}
-					}else{//normalement on rentre dans ce cas que si le mec change lui même las valeur du cookie
-						res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+					}else{//erreur si le cookie n'est pas trouvé
+						res.end(JSON.stringify({message:"cookie_not_found"}));
 						db.close(); // on referme la db
 					}
 				});
@@ -424,8 +424,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 					}else if(results[0] && !results[0].friendList){//si on trouve bien la friend liste associé au cookie ET si la liste n'existe pas (<=> il a 0 ami)
 						res.end(JSON.stringify({message:"none_friend_list_"}));
 						db.close(); // on referme la db
-					}else{//si le cookie n'est pas dans la db, arrive que si utilisateur change la valeur du cookie
-						res.end(JSON.stringify({message:"user not found"}));
+					}else{//erreur si le cookie n'est pas trouvé
+						res.end(JSON.stringify({message:"cookie_not_found"}));
 						db.close(); // on referme la db
 					}
 		});
@@ -433,49 +433,47 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 });
 };
 
-exports.friend_to_delete = function(friend_to_delete,cookie, res){
-friend_to_delete = ""+friend_to_delete;
-var m = cookie.split("cookieName=");
+exports.delete_friend = function(friend_to_delete,cookie, res){
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
-	if(err) {
-			console.log(err);
+	if(err) {//si erreur de connexion
+			console.log("erreur de connexion fonction delete_friend: "+err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
 			return;
 	}else{
-		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		var collection = db.collection('users');//on veut acceder à la collection users de la db ProjetEsme
+		var m = cookie.split("cookieName=");
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
-					if(err) {
-							console.log(err);
-							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+					if(err) {//erreur fonction find
+							console.log("erreur fonction delete_frien, fonction find: "+err);
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 							db.close(); // on referme la db
-					}else if(results[0]){
-						if(results[0].friendList){
-							var array = results[0].friendList;
-							var index = array.indexOf(friend_to_delete);
+					}else if(results[0]){//si on trouve un document associé au cookie
+						if(results[0].friendList){//si le document a une friend liste
+							var array = results[0].friendList;//on recupere le tableau friend list
+							var index = array.indexOf(friend_to_delete);// on cherche l'index de l'ami à supprimer
 							if (index > -1) {//si l'ami à supprimer est présent dans la friend list
 							    array.splice(index, 1);//on retire l'ami du tableau
+								//on met à jour le document avec le nouveau tableau d'amis
 							    collection.update({"cookie.value": m[1]},{ $set: {friendList:array}}, { upsert: true }, function(err, docs){
-								if(err) {
-									console.log(err);
-									res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+								if(err) {//erreur update
+									console.log("erreur dans la fonction delete_friend, fonction update: "+err);
+									res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 									db.close(); // on referme la db
 								}else{
 									res.end(JSON.stringify({message:"deletion_done_"}));
 									db.close(); // on referme la db
 								}
 								});
-							}else{
-								//si l'ami à supprimer n'est pas dans la friend list : certainement tentative de hack
+							}else{//si l'ami à supprimer n'est pas dans la friend list : certainement tentative de hack								
 								res.end(JSON.stringify({message:"friend_not_in_the_list"}));
 								db.close(); // on referme la db
 							}
-						}else{
+						}else{//si le document n'a pas une friend liste
 							res.end(JSON.stringify({message:"none_friend_to_delete_"}));
 							db.close(); // on referme la db
 						}
-					}
-					else{
-						res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+					}else{//erreur si le cookie n'est pas trouvé
+						res.end(JSON.stringify({message:"cookie_not_found"})); // conversion de l'objet JSON en string
 						db.close(); // on referme la db
 					}
 	});

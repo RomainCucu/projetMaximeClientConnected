@@ -28,7 +28,7 @@ connected.on_click_function_ = function(ev){ // pour logout et masquer le popup 
 		connected.post({ac:"add_friend",friend_to_add:id}, connected.callback); //passage au router des données
 	}else if(src.className.indexOf("lien_supp_ami")>-1){
 		connected.replace_content_by_animation_GIF_loader(id);//pour remplacer le bouton par un chargement
-		connected.post({ac:"delete_friend_request",friend_to_delete:id}, connected.callback); //passage au router des données
+		connected.post({ac:"delete_friend",friend_to_delete:id}, connected.callback); //passage au router des données
 	}
 	else{
 		$('#affichage_users_found_under_').popover('destroy'); // efface le popover quand on clique n'imp ou sur la page
