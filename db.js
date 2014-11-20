@@ -145,6 +145,8 @@ exports.get_info=function(c, res){
 							tab.push(entry.toString());
 
 						})
+						tab.push(results1[0].username);
+						console.log(tab[tab.length-1]);
 						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).limit(21).toArray(function(err, results){
 							if(err){
 								console.log("erreur fonction get_info fonction find 2: "+err);
@@ -153,9 +155,21 @@ exports.get_info=function(c, res){
 							} else {
 								if(results[0]) {// si ya au moins un statut a afficher
 									
+											var status_perso=[];
+											
+											for(a in results){
+												if (results[a].username==results1[0].username){
+													status_perso.push(results[a]);
+												}
+											}
+
+
+											
+
 											var obj_a_transmettre={};
 											obj_a_transmettre.message="status_update";
 											obj_a_transmettre.donnees=results.reverse();
+											obj_a_transmettre.status_perso=status_perso[0].status_user;
 											res.end(JSON.stringify(obj_a_transmettre)); 
 								} else { // si ya 0 statut à afficher
 									res.end(JSON.stringify({message:"no_status_to_show"})); 

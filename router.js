@@ -185,7 +185,6 @@ cb_cookie:
 			}else if(b.ac=="set_info"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				b.status_user += "";//forcer à string
-				b.status_user = b.status_user.replace(/ /g,"");//on supprime les espaces 
 				if(b.status_user.length>=1 && b.status_user.length<150){//status length entre 1 et 150 caract
 					db.set_info(b.status_user, this.req.headers.cookie, this.resp);
 				}else{

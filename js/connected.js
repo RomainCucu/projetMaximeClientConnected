@@ -164,7 +164,9 @@ connected.callback = function () {
 			console.log("Status trop court ou trop long");
 		/*fonction recuperation des statuts*/
 		}else if(r.message=="status_update"){
-			connected.display_status(r.donnees);				
+			connected.display_status(r.donnees);
+			connected.display_status_perso(r.status_perso);
+			
 		}else if(r.message=="no_friends"){
 			document.getElementById("show_status").innerHTML = "Just new ? :) Please add some friends, to fill your status wall"
 		}else if(r.message=="no_status_to_show"){
@@ -175,6 +177,11 @@ connected.callback = function () {
 	}else if(this.status==501) window.location="../index.html"
 };
 
+connected.display_status_perso=function(r){
+	document.getElementById("last_status_user").innerHTML="";
+	document.getElementById("last_status_user").innerHTML=r;
+
+};
 
 connected.display_status=function(r){
 	document.getElementById("show_status").innerHTML = " "; // On efface le contenu avant de recréer le chat
