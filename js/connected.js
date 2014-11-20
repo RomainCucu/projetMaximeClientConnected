@@ -15,7 +15,7 @@ connected.start=function(){
 	connected.show_frient_list();
 	connected.btn_delete_account_(); // pour supprimer le compte de l'user
 	connected.btn_submit_status_(); // pour stocker un status de l'user
-	connected.get_status();
+	connected.get_info();
 };
 
 connected.on_click_function_ = function(ev){ // pour logout et masquer le popup de la recherche d'user
@@ -65,8 +65,8 @@ connected.btn_delete_account_ = function(){
 	});
 };
 
-connected.get_status=function(){
-	data.ac = "get_status";
+connected.get_info=function(){
+	data.ac = "get_info";
 	connected.post(data, connected.callback);//passage au router des données
 };
 
@@ -141,7 +141,7 @@ connected.callback = function () {
 		}else if (r.message=="amis_ajouted"){
 			connected.show_frient_list();
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
-			connected.post({ac:"get_status"}, connected.callback);//passage au router des données			
+			connected.post({ac:"get_info"}, connected.callback);//passage au router des données			
 			console.log("amis ajouté avec succés");
 		/*fonction recuperation tu tableau d'ami*/
 		}else if (r.message=="friends_found_"){
@@ -334,6 +334,6 @@ window.onload = function(){
 		setTimeout(connected.start, 1);
 };
 
-window.setInterval(connected.get_status,7000);
+window.setInterval(connected.get_info,7000);
 
 

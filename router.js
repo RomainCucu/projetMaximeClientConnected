@@ -188,9 +188,9 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "too_short_or_too_long"}));
 				}
 				return;
-			}else if(b.ac=="get_status"){
+			}else if(b.ac=="get_info"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.get_status(this.req.headers.cookie, this.resp);
+				db.get_info(this.req.headers.cookie, this.resp);
 			}else{
 				util.log("INFO - Action not found : " + b.ac);
 				this.resp.writeHead(501, {"Content -Type": "application/json"});
