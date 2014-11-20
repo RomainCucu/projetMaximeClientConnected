@@ -263,14 +263,14 @@ function () {
 // Pour vérifier les données entrante
 
 verification_data_entrantes.check_info_caract_ = function(data){
-data.username ="" + data.username;//on force l'info username à être un string
-data.password = "" + data.password;//on force l'info pwd à être un string
-data.username = data.username.replace(/ /g,"");//on retire les espaces du username
-data.password = data.password.replace(/ /g,"");//on retire les espace du pwd
-var reg = new RegExp(/^\w+$/);//regexp Alphanumeric
-//on retourne vrai si chaque champs est compris entre 3 et 15 caractères et si c'est bien un alphaNumeric
-	if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
-		return true;
-	}else return false;	
+	data.username ="" + data.username;//on force l'info username à être un string
+	data.password = "" + data.password;//on force l'info pwd à être un string
+	data.username = data.username.replace(/ /g,"");//on retire les espaces du username
+	data.password = data.password.replace(/ /g,"");//on retire les espace du pwd
+	var reg = new RegExp(/^\w+$/);//regexp Alphanumeric
+	//on retourne vrai si chaque champs est compris entre 3 et 15 caractères et si c'est bien un alphaNumeric
+		if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
+			return true;
+		}else return false;	
 };
 

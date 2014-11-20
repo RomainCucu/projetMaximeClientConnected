@@ -384,5 +384,28 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	}
 });
 };
+```
+#Fonction verification_data_entrantes.check_info_caract_(data)
+##Description de la fonction
+Fonction qui va vérifier les champs d'un objet lors du login et register.
+Ainsi, on peut pas rentrer un username et password:
 
+1. qui n'est pas un string
+2. qui contient des espaces
+3. > 10 caractères et < 3 caractère
+4. qui n'est pas alpha numérique
+
+##Dans router.js
+```javascript
+verification_data_entrantes.check_info_caract_ = function(data){
+	data.username ="" + data.username;//on force l'info username à être un string
+	data.password = "" + data.password;//on force l'info pwd à être un string
+	data.username = data.username.replace(/ /g,"");//on retire les espaces du username
+	data.password = data.password.replace(/ /g,"");//on retire les espace du pwd
+	var reg = new RegExp(/^\w+$/);//regexp Alphanumeric
+	//on retourne vrai si chaque champs est compris entre 3 et 15 caractères et si c'est bien un alphaNumeric
+		if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
+			return true;
+		}else return false;	
+};
 ```
