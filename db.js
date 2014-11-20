@@ -156,19 +156,23 @@ exports.get_info=function(c, res){
 								if(results[0]) {// si ya au moins un statut a afficher
 									
 											var status_perso=[];
-											
 											for(a in results){
 												if (results[a].username==results1[0].username){
 													status_perso.push(results[a]);
 												}
 											}
 
+											var results_analyse=[];
+											for(b in results){
+												if(results[b].username!=results1[0].username){
+													results_analyse.push(results[b]);
+												}
+											}
 
-											
 
 											var obj_a_transmettre={};
 											obj_a_transmettre.message="status_update";
-											obj_a_transmettre.donnees=results.reverse();
+											obj_a_transmettre.donnees=results_analyse;
 											obj_a_transmettre.status_perso=status_perso[0].status_user;
 											res.end(JSON.stringify(obj_a_transmettre)); 
 								} else { // si ya 0 statut à afficher
