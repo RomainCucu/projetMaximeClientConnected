@@ -1,25 +1,6 @@
 var MongoClient = require('mongodb').MongoClient
     , format = require('util').format;
 
-
-exports.afficher_toute_la_base = function(){
-MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
-    if(err) throw err;//si erreur de connections
-	
-	 var collection = db.collection('test1');//on veut acceder à la collection test 1 de la db ProjetEsme
-	 collection.find().toArray(function(err, results) {
-    	if (err) throw err;
-	
-      console.log(results);
-        
-        // Let's close the db
-      db.close();
-   });
-});
-};
-
-
-
 exports.get_info=function(c, res){
 	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {	
@@ -40,34 +21,17 @@ exports.get_info=function(c, res){
 					r1=results1[0].friendList; 
 				if(r1){ 
 				if(r1.length>=1){ // cool il a des amis
-
-				
-					/*var string_requete_db="";
-		
-					for(variable in r1){
-						string_requete_db +='{ "username": "' + r1[variable] + '" },';
-					}
-
-					var string_requete_finale = string_requete_db.substring(0,(string_requete_db.length -1 ));
-				
-					string_requete_finale="[" + string_requete_finale + "]";
-				
-					var objet_requete_db = JSON.parse(string_requete_finale);*/
-					
-					// ca nous sort tous les amis qui on publié un status
-					//collection.find( { $or: objet_requete_db } ).sort({"date_status":-1}).toArray(function(err, results){
 						var tab = [];
 						results1[0].friendList.forEach(function(entry){
 							tab.push(entry.toString());
 
 						})
-						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).toArray(function(err, results){
+						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).limit(21).toArray(function(err, results){
 							if(err){
 								console.log("erreur fonction get_info fonction find 2: "+err);
 								res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 								db.close();
 							} else {
-
 								if(results[0]) {// si ya au moins un statut a afficher
 									
 											var obj_a_transmettre={};
@@ -80,40 +44,6 @@ exports.get_info=function(c, res){
 								}
 							}
 					});
-					
-
-					// A LAISSER
-					
-/* //TROP GOURMAND EN RESSOURCE
-					collection.find({}).sort({"date_status":-1}).toArray(function(err, results){ // results est un tableau
-						if(err) {
-								console.log(err);
-								res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
-						}else { 
-
-								var tab_status_friends =[];
-								for(var i=0; i<r1.length; i++){
-									for(var j=0; j<results.length; j++){
-										if(results[j].username==r1[i]){
-											tab_status_friends.push(results[j]);
-										}
-									}
-								}
-
-								if(tab_status_friends.length<1){
-									res.end(JSON.stringify({message:"no_status_to_show"})); 
-								} else {
-										var obj_a_transmettre={};
-										obj_a_transmettre.message="status_update";
-										//console.log(tab_status_friends);
-										obj_a_transmettre.donnees=tab_status_friends.reverse();
-										//console.log(JSON.stringify(obj_a_transmettre));
-										res.end(JSON.stringify(obj_a_transmettre)); 
-								}
-					
-						}
-					});
-*/
 				} }// if r1
 					else {
 						res.end(JSON.stringify({message:"no_friends"}));
@@ -157,8 +87,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 								db.close(); // on referme la db
 							}
 						});			
-					}							
-						
+					}					
 				});
 	}
 });
