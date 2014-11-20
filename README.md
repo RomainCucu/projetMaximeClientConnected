@@ -412,6 +412,9 @@ verification_data_entrantes.check_info_caract_ = function(data){
 
 #Fonction set_info
 ##Description de la fonction
+
+Fonction permettant de publier un status visible par ses amis uniquement
+
 Dans le router, on recois un objet avec un champs status_user. Il s'agit du status que l'utilisateur souhaite publier. En premier lieu, nous le forçon en string pour ensuite envoyer à la db ce status ainsi que le cookie du client.
 
 Dans la DB, on se connecte à la database.
@@ -479,6 +482,9 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 #Fonction get_info
 ##Description de la fonction
+
+Fonction permettant de récupérer les status des ses amis
+
 Dans le router, on envoie uniquement le cookie du client à la db.
 
 Dans la DB, on se connecte à la database.
@@ -559,6 +565,9 @@ exports.get_info=function(c, res){
 
 #Fonction delete
 ##Description de la fonction
+
+Fonction permettant de supprimer un compte (fonction appelée par l'user)
+
 Dans le router, on envoie uniquement le password du client à la db sur lequel on aura au préalable (coté router) supprimé les espaces éventuels et forcé la conversion en string.
 
 Dans la DB, on se connecte à la database.
