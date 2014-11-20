@@ -178,7 +178,7 @@ cb_cookie:
 				b.friend_to_delete = b.friend_to_delete.split('-');//l'id recu est de type "pseudo-delete"
 				b.friend_to_delete = b.friend_to_delete[0];
 				if(b.friend_to_delete.length>0){//si le string n'est pas vide on va à la db
-					db.delete_friend(b.friend_to_delete,this.req.headers.cookie, this.resp);
+					db.delete_.friend(b.friend_to_delete,this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
 				}
