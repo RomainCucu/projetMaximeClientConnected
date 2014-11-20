@@ -8,6 +8,13 @@
 [pour écrire en .MD](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 #Fonction register
+##Description de la fonction
+On récupère dans le router l'objet envoyé par le client composé des champs username et password.
+Dans le router, si *verification_data_entrantes.check_info_caract_()* renvoie vraie, alors on envoie au router le username et le password.
+(CF: description *verification_data_entrantes.check_info_caract_()* tout en bas)
+Dans la DB, on se connecte à notre data base et on insère un document composé du champs username, pseudo, et password.
+Il faut savoir que l'on a crée un champs pseudo (comprenant majuscule et minuscule) et un champs username (en minuscule pour faciliter la fonction login)
+Si il n'y a pas d'erreur, on lance DIRECTEMENT la fonction login
 ##côté router.js
 ```javascript
 else if (b.ac == "register"){
