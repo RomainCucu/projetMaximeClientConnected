@@ -157,7 +157,7 @@ connected.callback = function () {
 		/*fonction ajout statut*/
 		}else if(r.message=="tab_status_added"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-			connected.get_status();
+			document.getElementById("status_user").value="";
 			console.log("status ajouté avec succes !");
 		}else if(r.message=="too_short_or_too_long"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
