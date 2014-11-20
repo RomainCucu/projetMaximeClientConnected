@@ -24,7 +24,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 exports.get_status=function(c, res){
 	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {	
-				util.log(err);
+				console.log(err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
 				return;
 			}
@@ -130,7 +130,7 @@ var cookie = cookie.split("cookieName=");
 
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
-				util.log(err);
+				console.log(err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
 				return;
 			}
