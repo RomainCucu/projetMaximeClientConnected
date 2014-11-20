@@ -12,7 +12,7 @@
 On récupère dans le router l'objet envoyé par le client composé des champs username et password.
 Dans le router, si *verification_data_entrantes.check_info_caract_()* renvoie vraie, alors on envoie au router le username et le password.(CF: description *verification_data_entrantes.check_info_caract_()* tout en bas).
 
-Dans la DB, on se connecte à notre data base et on insère un document composé du champs username, pseudo, et password.
+Dans la DB, on se connecte à notre data base et, dans la collection USERS, on insère un document composé du champs username, pseudo, et password.
 Il faut savoir que l'on a crée un champs pseudo (comprenant majuscule et minuscule pour afficher le pseudo aux autres en prenant en compte la casse) et un champs username (en minuscule pour faciliter la fonction login, pas de prise en charge de la casse)
 ##côté router.js
 ```javascript
@@ -55,7 +55,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 Le client envoie son username et son password
 Dans le router, si *verification_data_entrantes.check_info_caract_()* renvoie vraie, alors on envoie au router le username.toLowerCase() (en minuscule car le username est en minuscule dans la DB) et le password.(CF: description *verification_data_entrantes.check_info_caract_()* tout en bas).
 
-Dans la DB, on se connecte à la db et on recherche un document qui comprend l'username et le password entrés. La fonction renvoie results[0] si un document match les informations entrées, et dans ce cas, on mets on créé un cookie et on met à jour le document avec le cookie. Si la fonction ne renvoie pas de results[0], cela signifie que soit le username ou soit le password est faux.
+Dans la DB, on se connecte à la db et on recherche dans la collection USERS un document qui comprend l'username et le password entrés. La fonction renvoie results[0] si un document match les informations entrées, et dans ce cas, on mets on créé un cookie et on met à jour le document avec le cookie. Si la fonction ne renvoie pas de results[0], cela signifie que soit le username ou soit le password est faux.
 ##Côté router.js
 ```javascript
 if (b.ac == "login") {
@@ -112,6 +112,10 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 };
 ```
 #Fonction logout
+##Description de la fonction
+Dans le router, on appelle juste la fonction de la db en voyant le cookie.
+
+Dans la DB, on se connecte à la DB et, dans la collection USERS, on remplace le cookie avec la valeur donnée par 0.
 ##Côté router.js
 ```javascript
 if (b.ac == "logout"){
