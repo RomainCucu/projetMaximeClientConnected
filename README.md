@@ -556,4 +556,89 @@ exports.get_info=function(c, res){
 
 ```
 
-//////////////////////////////////////////////
+
+#Fonction delete
+##Description de la fonction
+Dans le router, on envoie uniquement le password du client à la db sur lequel on aura au préalable (coté router) supprimé les espaces éventuels et forcé la conversion en string.
+
+Dans la DB, on se connecte à la database.
+
+1. On supprime dans la collection user un document (la présence d'un user) en fonction de son cookieName et du password : on récupère un 0 ou 1 selon que l'action a réussi ou non.
+	* Si l'action a réussi, on re
+	* Si results[0] existe, on vérifie si il contient un tableau friendliste
+		* Si results[0].friendliste existe, on vérifie si celui-ci n'est pas vide auquel cas on envoie un message au client précisant qu'il ne possède actuellement aucun amis, et on lui propose d'en ajouter
+		* Si results.friendliste contient des champs, on recherche dans la collection statutbox tous les documents dont le pseudo est l'un des amis de l'user. 
+			* Si results[0] n'existe (le champs renvoyé) pas, alors les amis de l'user n'ont pas encore publié de status, auquel cas, on retourne à l'user un message stipulant que ses amis n'ont pas encore publié de status
+			* si results[0] existe, on envoie au client, un tableau d'objets contenant chacun : le status, la date de publication et l'auteur
+
+##Côté router.js
+```javascript
+else if(b.ac == "delete"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				b.password +="";//pour forcer en string
+				b.password = b.password.replace(/ /g,"");//on supprime les espaces 
+				if(b.password!=""){
+					db.delete_(this.req.headers.cookie, b.password, this.resp);
+					return;
+				} else{
+					this.resp.end(JSON.stringify({message: "error_delete_account"}));	
+				} 
+			}
+```
+##Côté db.js
+```javascript
+exports.get_info=function(c, res){
+	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {	
+				console.log("erreur fonction get_info connection: "+err);
+				res.end(JSON.stringify({message: "erreur_connection"}));
+				return;
+			}
+	else{	
+			c = c.split("cookieName=");
+			var collection = db.collection('statutBox');
+			var collection2 = db.collection('users'); 
+			collection2.find({"cookie.value": c[1]}).toArray(function(err, results1){
+				if(err){
+					console.log("erreur fonction get_info fonction find 1: "+err);
+					res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+					db.close();
+				} else if (results1[0]){
+					r1=results1[0].friendList; 
+				if(r1){ 
+				if(r1.length>=1){ // cool il a des amis
+						var tab = [];
+						results1[0].friendList.forEach(function(entry){
+							tab.push(entry.toString());
+
+						})
+						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).limit(21).toArray(function(err, results){
+							if(err){
+								console.log("erreur fonction get_info fonction find 2: "+err);
+								res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+								db.close();
+							} else {
+								if(results[0]) {// si ya au moins un statut a afficher
+									
+											var obj_a_transmettre={};
+											obj_a_transmettre.message="status_update";
+											obj_a_transmettre.donnees=results.reverse();
+											res.end(JSON.stringify(obj_a_transmettre)); 
+								} else { // si ya 0 statut à afficher
+									res.end(JSON.stringify({message:"no_status_to_show"})); 
+									db.close();
+								}
+							}
+					});
+				} }// if r1
+					else {
+						res.end(JSON.stringify({message:"no_friends"}));
+						db.close();
+					}	
+				}
+			});
+		}
+});
+};
+
+```
