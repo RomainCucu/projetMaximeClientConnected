@@ -6,6 +6,28 @@
 ######Contributors : Alexandre Magne, Romain Cunault
 
 [pour écrire en .MD](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+#Organisation de la DataBase
+La database est de type MongoDB et est hosté sur Compose. Le seul module nécessaire est MongoDB.
+
+Notre database est organisé en deux collections qui sont:
+1. La collection *users*
+2. La collection *statusBox*
+
+###Dans la collection *users*
+Il y a un index unique sur le champs *username* afin qu'il n'y ait pas de doublon d'username.
+La collection *users* comprend des documents composés de:
+- id: id unique généré automatiquement par mongoDB;
+- username: username d'un utilisateur. On s'assure qu'il soit en minuscule afin de faciliter la comparaison lors du login. On s'assure également qu'il soit de type alpha-numérique et compris entre 3 et 10 caractères;
+- pseudo: pareil que le *username* sauf qu'il peut comporter des majuscules. Utilisés pour afficher les amis;
+- password:  On s'assure également qu'il soit de type alpha-numérique et compris entre 3 et 10 caractères;
+- cookie: prend la valeur 0 lors de la déconnexion. Sinon comporte deux champs qui sont *value* (sa valeur) et *expire* (sa date d'expiration);
+- friendList: tableau qui contient les pseudos des amis.
+
+La collection *statusBox* comprend des documents composés de:
+- id: id unique généré automatiquement par mongoDB;
+- username: username de l'utilisateur qui à publier le statut;
+- data_status: date de publication du statut;
+- status_user: contenu du statut.
 
 #Fonction register
 ##Description de la fonction
