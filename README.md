@@ -24,6 +24,7 @@ La collection *users* comprend des documents composés de:
 - cookie: prend la valeur 0 lors de la déconnexion. Sinon comporte deux champs qui sont *value* (sa valeur) et *expire* (sa date d'expiration);
 - friendList: tableau qui contient les pseudos des amis.
 
+###Dans la collection *statutBox*
 La collection *statutBox* comprend des documents composés de:
 - id: id unique généré automatiquement par mongoDB;
 - username: username de l'utilisateur qui à publier le statut;
