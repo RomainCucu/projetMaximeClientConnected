@@ -5,6 +5,8 @@
 
 ######Contributors : Alexandre Magne, Romain Cunault
 
+[pour écrire en .MD](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
 #Fonction register
 ##côté router.js
 ```javascript
