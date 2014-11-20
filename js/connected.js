@@ -140,8 +140,8 @@ connected.callback = function () {
 			console.log("tu as deja cet amis dans ta liste damis");
 		}else if (r.message=="amis_ajouted"){
 			connected.show_frient_list();
-			connected.post({ac:get_status}, connected.callback);//passage au router des données
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
+			connected.post({ac:get_status}, connected.callback);//passage au router des données			
 			console.log("amis ajouté avec succés");
 		/*fonction recuperation tu tableau d'ami*/
 		}else if (r.message=="friends_found_"){
