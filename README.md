@@ -236,11 +236,16 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 };
 ```
 #Fonction get_friends
+##Description de la fonction
+Dans le router, on appelle la fonction de la db en envoyant le cookie du client en paramètre
+
+Dans la DB, on se connecte à la DB et dans la collection USERS, on va rechercher le document correspondant au cookie. Ce document est représenté par results[0]. Ensuite on regarde l'existence de results[0].friendList. Si il existe, alors on renvoie au client le tableau results[0].friendList. Sinon on renvoie un message informant que l'utilisateur n'a pas d'ami.
+
 ##Côté router.js
 ```javascript
 else if(b.ac == "get_friends"){
 	this.resp.writeHead(200, {"Content-Type":"application/json"});
-	db.friend_list_request(this.req.headers.cookie, this.resp);
+	db.get_friends(this.req.headers.cookie, this.resp);
 	return;
 }
 ```
