@@ -151,9 +151,9 @@ connected.callback = function () {
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			connected.get_status();
 			console.log("status ajouté avec succes !");
-		}else if(r.message=="to_short"){
+		}else if(r.message=="too_short_or_too_long"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-			console.log("Status vide");
+			console.log("Status trop court ou trop long");
 		}else if(r.message=="status_update"){
 			connected.display_status(r.donnees);				
 		}else if(r.message=="no_friends"){

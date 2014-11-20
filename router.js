@@ -185,7 +185,7 @@ cb_cookie:
 				if(b.status_user.length>=1 && b.status_user.length<150){//status length entre 1 et 150 caract
 					db.add_status_user(b.status_user, this.req.headers.cookie, this.resp);
 				}else{
-					this.resp.end(JSON.stringify({message: "to_short"}));
+					this.resp.end(JSON.stringify({message: "too_short_or_too_long"}));
 				}
 				return;
 			}else if(b.ac=="get_status"){
