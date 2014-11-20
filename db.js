@@ -193,11 +193,10 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						db.close(); // on referme la db
 					}
 				});
-			}else{
+			}else{//si il n'y a pas de documents associés au username et pwd
 				res.end(JSON.stringify({message: "erreur_login_information_entrante"}));
 				db.close(); // on referme la db
-			}					
-
+			}
 			});
 }
 });	
