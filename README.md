@@ -197,6 +197,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 							db.close(); // on referme la db
 					}else if(results[0]&&results[0].friendList){//si on trouve bien la friend liste associé au cookie ET si la liste existe (<=> il a un ou + amis)
+					//renvoi le tableau contenant les amis
 						res.end(JSON.stringify({message:"friends_found_",friendList:results[0].friendList}));
 						db.close(); // on referme la db
 					}else if(results[0] && !results[0].friendList){//si on trouve bien la friend liste associé au cookie ET si la liste n'existe pas (<=> il a 0 ami)
