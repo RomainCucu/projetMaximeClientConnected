@@ -126,7 +126,7 @@ exports.get_info=function(c, res){
 };
 
 
-exports.set_info=function(status_user, cookie, res){
+exports.set_info=function(status_user, cookie, res){	
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
 				console.log("erreur connexion fonction set_info: "+err);
@@ -136,7 +136,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		var collection2 = db.collection('statutBox');
-		var cookie = cookie.split("cookieName=");
+		cookie = cookie.split("cookieName=");
 			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
 					if(err) {
 							console.log("erreur fonction set_info fonction find: "+err);
