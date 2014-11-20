@@ -80,7 +80,7 @@ connected.show_pseudo_ = function(){
 };
 
 connected.show_frient_list = function(){
-	connected.post({ac:"friend_list_request"}, connected.callback); //passage au router des données
+	connected.post({ac:"get_friends"}, connected.callback); //passage au router des données
 };
 
 connected.btn_search_a_user = function(){

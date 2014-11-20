@@ -165,9 +165,9 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
 				}
 				return;
-			}else if(b.ac == "friend_list_request"){
+			}else if(b.ac == "get_friends"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.friend_list_request(this.req.headers.cookie, this.resp);
+				db.get_friends(this.req.headers.cookie, this.resp);
 				return;
 			}else if(b.ac == "delete_friend_request"){				
 				this.resp.writeHead(200, {"Content-Type":"application/json"});

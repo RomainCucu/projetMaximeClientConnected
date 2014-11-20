@@ -119,7 +119,7 @@ else if(b.ac == "add_friend"){
 ```javascript
 exports.add_friend = function(friend_pseudo_to_add,cookie,res){
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
-	if(err) {
+	if(err) {//erreur de connexion
 			console.log("erreur connexion fonction add_friend: "+err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
 			return;
@@ -167,6 +167,46 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						db.close(); // on referme la db
 					}
 				});
+	}
+});
+};
+```
+#Fonction get_friends
+##Côté router.js
+```javascript
+else if(b.ac == "get_friends"){
+	this.resp.writeHead(200, {"Content-Type":"application/json"});
+	db.friend_list_request(this.req.headers.cookie, this.resp);
+	return;
+}
+```
+##Côté db.js
+```javascript
+exports.get_friends = function(cookie,res){
+MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {//erreur de connexion
+			console.log("erreur de connexion fonction get friends: "+err);
+			res.end(JSON.stringify({message: "erreur_connection"}));
+			return;
+	}else{
+		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
+		var m = cookie.split("cookieName=");//on recupere la valeur du cookie qui nous intéresse
+		collection.find({"cookie.value": m[1]}).toArray(function(err, results){//on veut acceder à la friend list du document avec le cookie correspondant
+					if(err) {
+							console.log("erreur fonction add_friends, fonction find: "+err);
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
+							db.close(); // on referme la db
+					}else if(results[0]&&results[0].friendList){//si on trouve bien la friend liste associé au cookie ET si la liste existe (<=> il a un ou + amis)
+						res.end(JSON.stringify({message:"friends_found_",friendList:results[0].friendList}));
+						db.close(); // on referme la db
+					}else if(results[0] && !results[0].friendList){//si on trouve bien la friend liste associé au cookie ET si la liste n'existe pas (<=> il a 0 ami)
+						res.end(JSON.stringify({message:"none_friend_list_"}));
+						db.close(); // on referme la db
+					}else{//si le cookie n'est pas dans la db, arrive que si utilisateur change la valeur du cookie
+						res.end(JSON.stringify({message:"user not found"}));
+						db.close(); // on referme la db
+					}
+		});
 	}
 });
 };
