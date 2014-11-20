@@ -287,6 +287,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 Dans le router, on recois un objet avec un champs du type : friend_to_delete = "pseudo-delete". Tout d'abord, nous le forcons en string, puis on supprime les espace, puis on split la chaine pour récupérer que "pseudo". On envoie à la db ce pseudo et le cookie du client
 
 Dans la DB, on se connecte à la db, et dans la collection USERS:
+
 1. On recupère le document correspondant au cookie
 2. On vérifie si results[0].friendList existe, c'est à dire si il a des amis
   - Si la friend liste n'existe pas (normalement peut pas être appeler, sauf si envoyer en console) => mesure de sécurité, renvoie message erreur
