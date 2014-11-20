@@ -128,7 +128,7 @@ connected.callback = function () {
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 		}else if(r.message=="search_name_length_too_short"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-		}else if (r.message=="pseudo_request_failed"){
+		}else if (r.message=="aucun_utilisateur_trouved"){
 			connected.show_user_under_search_bar(r.liste_user_found);//envoi du tableau contenant "no occurence found"
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 		}else if (r.message=="ajout_de_soi_meme"){
@@ -141,7 +141,7 @@ connected.callback = function () {
 		}else if (r.message=="amis_ajouted"){
 			connected.show_frient_list();
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
-			connected.post({ac:get_status}, connected.callback);//passage au router des données			
+			connected.post({ac:"get_status"}, connected.callback);//passage au router des données			
 			console.log("amis ajouté avec succés");
 		/*fonction recuperation tu tableau d'ami*/
 		}else if (r.message=="friends_found_"){
