@@ -14,8 +14,6 @@ Dans le router, si *verification_data_entrantes.check_info_caract_()* renvoie vr
 
 Dans la DB, on se connecte à notre data base et on insère un document composé du champs username, pseudo, et password.
 Il faut savoir que l'on a crée un champs pseudo (comprenant majuscule et minuscule pour afficher le pseudo aux autres en prenant en compte la casse) et un champs username (en minuscule pour faciliter la fonction login, pas de prise en charge de la casse)
-
-Si il n'y a pas d'erreur, on lance DIRECTEMENT la fonction login
 ##côté router.js
 ```javascript
 else if (b.ac == "register"){
@@ -44,10 +42,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				//car il y a un Index-Unique sur le username dans la collection users				
 				res.end(JSON.stringify({message:"username_existant_"}));
 				db.close(); // on referme la db
-			}else{
-				//si le register se passe bien, on login directement l'utilisateur afin qu'il se connecte automatiquement
-				//sans avoir à réentrer son username et son pwd
-				exports.login(username,pwd,res);			
+			}else{				
+				res.end(JSON.stringify({message:"register_ok_"}));
 			}
 		});
 	}

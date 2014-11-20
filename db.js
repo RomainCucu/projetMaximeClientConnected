@@ -217,10 +217,8 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				//car il y a un Index-Unique sur le username dans la collection users				
 				res.end(JSON.stringify({message:"username_existant_"}));
 				db.close(); // on referme la db
-			}else{
-				//si le register se passe bien, on login directement l'utilisateur afin qu'il se connecte automatiquement
-				//sans avoir à réentrer son username et son pwd
-				exports.login(username,pwd,res);			
+			}else{				
+				res.end(JSON.stringify({message:"register_ok_"}));
 			}
 		});
 	}
