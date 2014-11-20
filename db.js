@@ -1,4 +1,3 @@
-var db1=require("./db.js");
 var MongoClient = require('mongodb').MongoClient
     , format = require('util').format;
 
@@ -230,7 +229,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 				res.end(JSON.stringify({message:"username_existant_"}));
 				db.close(); // on referme la db
 			}else{
-				db1.login(username,pwd,res);			
+				exports.login(username,pwd,res);			
 			}
 		});
 	}
