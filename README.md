@@ -1,7 +1,9 @@
-projetMaximeClientConnected
-===========================
-Projet facebook
-Contributors : Alexandre Magne, Romain Cunault
+#projetMaximeClientConnected
+
+###Projet réalisé dans le cadre d'un TP Client - Serveur à l'ESME Sudria.
+###Sujet : Client déconnecté.
+
+######Contributors : Alexandre Magne, Romain Cunault
 
 #Fonction register
 ##côté router.js
