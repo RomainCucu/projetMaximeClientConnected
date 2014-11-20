@@ -130,9 +130,9 @@ cb_cookie:
 		var b = this.b;
 		if (ret) {
 
-			if (b.ac == "log_out_account"){
+			if (b.ac == "logout"){
 				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.logout_account_user(this.req.headers.cookie, this.resp);	
+				db.logout(this.req.headers.cookie, this.resp);	
 				return;			
 			}else if(b.ac == "delete"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
