@@ -47,7 +47,7 @@ connected.btn_submit_status_=function(){
 };
 
 connected.fill_data_status=function(){
-	data.ac = "add_status";
+	data.ac = "set_info";
 	data.status_user=document.getElementById('status_user').value;
 };
 

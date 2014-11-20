@@ -122,7 +122,7 @@ exports.get_info=function(c, res){
 };
 
 
-exports.add_status_user=function(status_user, cookie, res){
+exports.set_info=function(status_user, cookie, res){
 
 status_usr = status_user;
 var cookie = cookie.split("cookieName=");	
@@ -508,7 +508,7 @@ exports.get_info=function(res){
 };
 */
 
-exports.add_status_user=function(status_user, cookie, res){
+exports.set_info_user=function(status_user, cookie, res){
 status_usr = status_user;
 var cookie = cookie.split("cookieName=");	
 

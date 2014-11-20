@@ -180,10 +180,10 @@ cb_cookie:
 				}else{
 					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
 				}
-			}else if(b.ac=="add_status"){
+			}else if(b.ac=="set_info"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				if(b.status_user.length>=1 && b.status_user.length<150){//status length entre 1 et 150 caract
-					db.add_status_user(b.status_user, this.req.headers.cookie, this.resp);
+					db.set_info(b.status_user, this.req.headers.cookie, this.resp);
 				}else{
 					this.resp.end(JSON.stringify({message: "too_short_or_too_long"}));
 				}
