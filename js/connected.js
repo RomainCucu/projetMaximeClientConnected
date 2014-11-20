@@ -135,6 +135,7 @@ connected.callback = function () {
 			console.log("tu as deja cet amis dans ta liste damis");
 		}else if (r.message=="amis_ajouted"){
 			connected.show_frient_list();
+			connected.post({ac:get_status}, connected.callback);//passage au router des données
 			document.getElementById(contenuHTML.id).innerHTML = '<span class="text-success">Ajout Réussi</span>';
 			console.log("amis ajouté avec succés");
 		}else if (r.message=="friends_found_"){
@@ -145,6 +146,7 @@ connected.callback = function () {
 		}else if(r.message == "deletion_done_"){
 			console.log("amis supprimés");
 			connected.show_frient_list();
+			connected.post(data, connected.callback);//passage au router des données
 		}else if(r.message=="tab_status_added"){
 			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
 			connected.get_status();
