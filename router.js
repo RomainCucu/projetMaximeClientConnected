@@ -103,7 +103,7 @@ go_post:
 			this.resp.writeHead(200,{"Content-Type": "application/json" });
 			if (verification_data_entrantes.check_info_caract_(b)){
 				//on regarde si les champs de l'objet ne contiennent pas de caracèrest spéciaux(eg: espace, crochets...) et sont de longueur entre 3 et 10 avant d'envoyer au router
-				db.login(b.username, b.password, this.resp);
+				db.login(b.username.toLowerCase(), b.password, this.resp);
 			}else{
 				this.resp.end(JSON.stringify({message: "login_connexion_refused"}));
 			}			
