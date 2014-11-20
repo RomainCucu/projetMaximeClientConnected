@@ -25,7 +25,8 @@ exports.get_status=function(c, res){
 	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {	
 				util.log(err);
-				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+				res.end(JSON.stringify({message: "erreur_connection"}));
+				return;
 			}
 	else{	
 			c = c.split("cookieName=");
@@ -34,14 +35,14 @@ exports.get_status=function(c, res){
 			collection2.find({"cookie.value": c[1]}).toArray(function(err, results1){
 				if(err){
 					console.log(err);
-					res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+					res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 				} else if (results1[0]){
 					r1=results1[0].friendList; 
 				if(r1){ 
 				if(r1.length>=1){ // cool il a des amis
 
 				
-					var string_requete_db="";
+					/*var string_requete_db="";
 		
 					for(variable in r1){
 						string_requete_db +='{ "username": "' + r1[variable] + '" },';
@@ -51,13 +52,19 @@ exports.get_status=function(c, res){
 				
 					string_requete_finale="[" + string_requete_finale + "]";
 				
-					var objet_requete_db = JSON.parse(string_requete_finale);
+					var objet_requete_db = JSON.parse(string_requete_finale);*/
 					
 					// ca nous sort tous les amis qui on publié un status
-					collection.find( { $or: objet_requete_db } ).sort({"date_status":-1}).toArray(function(err, results){
+					//collection.find( { $or: objet_requete_db } ).sort({"date_status":-1}).toArray(function(err, results){
+						var tab = [];
+						results1[0].friendList.forEach(function(entry){
+							tab.push(entry.toString());
+
+						})
+						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).toArray(function(err, results){
 							if(err){
 								console.log(err);
-								res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+								res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 							} else {
 
 								if(results[0]) {// si ya au moins un statut a afficher
@@ -124,7 +131,8 @@ var cookie = cookie.split("cookieName=");
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {
 				util.log(err);
-				res.end(JSON.stringify({message: "erreur_connection"})); // on convertit le string en objet
+				res.end(JSON.stringify({message: "erreur_connection"}));
+				return;
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
@@ -133,7 +141,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			collection.find({"cookie.value": cookie[1]}).toArray(function(err, results){
 					if(err) {
 							console.log(err);
-							res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+							res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 					}else if(results[0]){ // il a bien un cookie valide
 
 						username=results[0].username;
@@ -141,9 +149,9 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 						collection2.insert({username: username, date_status: date_status, status_user:status_usr},function(err, doc){
 							if(err){
-								res.end(JSON.stringify({message:"erreur_de_la_db_:("})); // conversion de l'objet JSON en string
+								res.end(JSON.stringify({message:"erreur_de_la_db_:("}));
 							}else{
-								res.end(JSON.stringify({message:"tab_status_added"})); // conversion de l'objet JSON en string
+								res.end(JSON.stringify({message:"tab_status_added"}));
 							}
 						});			
 					}							
@@ -162,7 +170,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 						console.log(err);
 						res.end(JSON.stringify({message: "erreur_connection"}));
-						db.close(); // on referme la db
+						return;
 	}else{
 	
 	var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
@@ -212,7 +220,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 						console.log(err);
 						res.end(JSON.stringify({message: "erreur_connection"}));
-						db.close(); // on referme la db
+						return;
 			}
 	else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
@@ -238,7 +246,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 				console.log(err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
-				db.close(); // on referme la db
+				return;
 			}
 	else{		
 		var collection = db.collection('users'); 
@@ -266,7 +274,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 			console.log(err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
-			db.close(); // on referme la db
+			return;
 	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.update({"cookie.value": m[1]},{ $set: {cookie:0}}, { upsert: true }, function(err, docs){
@@ -291,7 +299,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 			console.log(err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
-			db.close(); // on referme la db
+			return;
 	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
@@ -317,7 +325,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 			console.log(err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
-			db.close(); // on referme la db
+			return;
 	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find().toArray(function(err, results){
@@ -358,7 +366,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 			console.log(err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
-			db.close(); // on referme la db
+			return;
 	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
@@ -412,7 +420,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 			console.log(err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
-			db.close(); // on referme la db
+			return;
 	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
@@ -443,7 +451,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 			console.log(err);
 			res.end(JSON.stringify({message: "erreur_connection"}));
-			db.close(); // on referme la db
+			return;
 	}else{
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
 		collection.find({"cookie.value": m[1]}).toArray(function(err, results){
@@ -524,7 +532,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	if(err) {
 				console.log(err);
 				res.end(JSON.stringify({message: "erreur_connection"}));
-				db.close(); // on referme la db
+				return;
 			}
 	else{		
 		var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
@@ -565,7 +573,7 @@ exports.valid_cookie = function(c,obj,fct){
 				    if(err) {
 				    	console.log(err);
 				    	obj[fct](false);
-				    	db.close(); // on referme la db
+				    	return;
 				    }else{
 					var collection = db.collection('users');
 					c = c.split("cookieName=");
