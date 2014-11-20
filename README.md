@@ -283,6 +283,16 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 ```
 
 #Fonction delete_friend
+##Description de la fonction
+Dans le router, on recois un objet avec un champs du type : friend_to_delete = "pseudo-delete". Tout d'abord, nous le forcons en string, puis on supprime les espace, puis on split la chaine pour récupérer que "pseudo". On envoie à la db ce pseudo et le cookie du client
+
+Dans la DB, on se connecte à la db, et dans la collection USERS:
+1. On recupère le document correspondant au cookie
+2. On vérifie si results[0].friendList existe, c'est à dire si il a des amis
+  - Si la friend liste n'existe pas (normalement peut pas être appeler, sauf si envoyer en console) => mesure de sécurité, renvoie message erreur
+  - Si la friend liste existe
+  	- Si le pseudo à supprimer n'est pas présent dans la friend list (impossible sauf si modif console) => mesure de sécurité, renvoie message erreur
+  	- Si le pseudo est dans la friend liste => on retire le pseudo du tableau et on met à jour le document avec la nouvelle frien list
 ##Côté router.js
 ```javascript
 else if(b.ac == "delete_friend"){				
