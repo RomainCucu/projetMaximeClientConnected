@@ -156,12 +156,18 @@ Le router reçois un objet avec le champs friend_to_add. On s'assure que celui-c
 
 Dans la DB, on se connecte à la db, et dans la collection USERS:
 1. On vérifie que le cookie du client est bien présent dans la DB avant toute modification, sinon on renvoi un message d'erreur au client
+
 2. On récupère le document correspondant au cookie, qui est results[0]
+
 3. On vérifie l'existance de results[0].friendList
-* Si results[0].friendList n'existe pas <=> l'utilisateur n'a pas encore d'amis, donc on crée un tableau avec l'ami qu'il souhaite ajouter
-* Si results[0].friendList existe => on récupère results[0].friendList dans un tableau et on regarde dans le tableau : 
-		* Si le nom de l'ami qu'il veut ajouté est le même que son nom, c'est à dire qu'il s'ajoute lui même alors on dit au client que c'est pas possible
-		* Sinon on rajoute au tableau l'ami qu'il souhaite ajouter au tableau
+
+..* Si results[0].friendList n'existe pas <=> l'utilisateur n'a pas encore d'amis, donc on crée un tableau avec l'ami qu'il souhaite ajouter
+
+..* Si results[0].friendList existe => on récupère results[0].friendList dans un tableau et on regarde dans le tableau : 
+		....* Si le nom de l'ami qu'il veut ajouté est le même que son nom, c'est à dire qu'il s'ajoute lui même alors on dit au client que c'est pas possible
+
+		....* Sinon on rajoute au tableau l'ami qu'il souhaite ajouter au tableau
+		
 4. On met à jour le document avec le nouveau tableau de friendList
 
 ##Côté router.js
