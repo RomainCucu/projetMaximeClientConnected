@@ -146,7 +146,7 @@ exports.get_info=function(c, res){
 
 						})
 						tab.push(results1[0].username);
-						console.log(tab[tab.length-1]);
+						//console.log(tab[tab.length-1]);
 						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).limit(21).toArray(function(err, results){
 							if(err){
 								console.log("erreur fonction get_info fonction find 2: "+err);
