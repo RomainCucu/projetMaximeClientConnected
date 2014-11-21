@@ -147,12 +147,16 @@ exports.get_info=function(c, res){
 						})
 						tab.push(results1[0].username);
 						//console.log(tab[tab.length-1]);
-						collection.find( {  username:{ $in: tab }} ).sort({"date_status":-1}).limit(21).toArray(function(err, results){
+
+						for(a in results1[0].username]){
+						collection.find( {  username:a ).sort({"date_status":-1}).limit(3).toArray(function(err, results){
 							if(err){
 								console.log("erreur fonction get_info fonction find 2: "+err);
 								res.end(JSON.stringify({message:"erreur_de_la_db_"}));
 								db.close();
 							} else {
+
+								console.log(results);
 								if(results[0]) {// si ya au moins un statut a afficher
 									
 											var status_perso=[];
