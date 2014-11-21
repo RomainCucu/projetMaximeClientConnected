@@ -17,7 +17,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 						return;
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });		
-		db.collection('users').update({username: username, password:pwd},{ $set: {connected:1}}, { upsert: false }, function(err, docs){
+		db.collection('users').update({username: username, password:pwd},{ $set: {"connected":1}}, { upsert: false }, function(err, docs){
 			if (err) {//en cas d'erreur de la fonction find
 				console.log("erreur lors dans la fonction login, collection.find: "+err);
 				res.end(JSON.stringify({message: "login_ko"}));
@@ -93,12 +93,11 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			return;
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });
-		db.collection('users').update({id_unique: id},{ $set: {connected:0}}, function(err, docs){
+		db.collection('users').update({id_unique: id},{ $set: {"connected":0}}, function(err, docs){
 					if(err) {
 						res.end(JSON.stringify({message: "logout_ko"}));
 						db.close();
-					}else if(docs==1){
-						console.log(id);
+					}else if(docs==1){						
 						res.end(JSON.stringify({message:"logout_ok"}));
 						db.close();
 					}else{
@@ -132,14 +131,14 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			if(err){
 				console.log("erreur fonction delete fonction remove: "+err);
 				res.end(JSON.stringify({message:"error_delete_account"})); 
-				db.close(); // on referme la db
+				db.close();
 			}else{
 				if(doc==0){ // user not found( mauvais mdp)
 					res.end(JSON.stringify({message:"delete_ko_wrong_pwd"})); 
-					db.close(); // on referme la db
+					db.close();
 				} else if(doc==1){ // suppression réussie
 					res.end(JSON.stringify({message:"delete_ok"}));
-					db.close(); // on referme la db
+					db.close();
 				}
 			}
 		});

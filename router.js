@@ -124,6 +124,16 @@ go_post:
 				traitementData(b.id_);			
 				db.logout(b.id_, this.resp);	
 				return;			
+			
+			}else if(b.ac == "delete"){	
+				traitementData(b.password);
+				traitementData(b.id_);
+				if(isLengthValid(b.password) && isAlphaNumeric(b.password)){
+					db.delete_(b.id_, b.password, this.resp);					
+				} else{
+					this.resp.writeHead(200, {"Content-Type":"application/json"});
+					this.resp.end(JSON.stringify({message: "error_delete_account"}));	
+				} 
 			}
 		else {
 			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
