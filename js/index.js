@@ -109,8 +109,8 @@ index.post = function (data, callback) {
 index.callback = function () {
 	// si tout s'est bien passé
 	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-	console.log(r);
-	console.log("status: "+this.status + "=="+this.readyState);
+	if (this.status == 200 && this.readyState==4) console.log(r);
+	
 
 };
 
