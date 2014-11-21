@@ -158,7 +158,7 @@ go_post:
 				db.get_friends(b.id_, this.resp);				
 			}
 		else {
-			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
+			
 		}
 		
 		
@@ -290,7 +290,7 @@ function () {
 	this.resp.write(this.file);
 	this.resp.end();
 	}
-}
+};
 
 
 // Pour vérifier les données entrante

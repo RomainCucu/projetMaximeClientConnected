@@ -108,8 +108,12 @@ index.post = function (data, callback) {
 // fonction de retour pour notre objet index
 index.callback = function () {
 	// si tout s'est bien passé
+	if (this.status == 200 && this.readyState==4) {
 	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-	if (this.status == 200 && this.readyState==4) console.log(r);
+	
+		console.log(r);
+		console.log(this);
+	}
 	
 
 };
