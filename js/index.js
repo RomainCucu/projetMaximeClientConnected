@@ -54,6 +54,11 @@ index.fill_data_login = function(){
 };
 
 
+index.test = function(){
+	index.post({ac:"login",username:"romain",password:"romain"},index.callback);
+	index.post({ac:"register",username:"romain1992",password:"romain"},index.callback);
+};
+
 index.post = function (data, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/");
@@ -65,6 +70,9 @@ index.post = function (data, callback) {
 // fonction de retour pour notre objet index
 index.callback = function () {
 	// si tout s'est bien passé
+	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+	console.log(r);
+	console.log("status: "+this.status);
 	if (this.readyState == 4 && this.status == 200) {		
 		console.log("this.responsetext :" + this.responseText);
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
@@ -86,7 +94,8 @@ index.callback = function () {
 			index.post(data, index.callback);//passage au router des données
 		}
 		else{
-			alert("demande  rejetée !");
+			//alert("demande  rejetée !");
+			console.log("ko");
 		}
 }
 };
@@ -117,5 +126,5 @@ index.mettre_les_cases_en_rouges_du_formulaire = function(classname){
 };
 
 window.onload = function(){
-		setTimeout(index.start, 1);
+		setTimeout(index.test, 1);
 };

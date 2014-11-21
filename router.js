@@ -100,21 +100,24 @@ go_post:
 		b = JSON.parse(b);
 		this.b = b;
 		if (b.ac == "login") {
-			this.resp.writeHead(200,{"Content-Type": "application/json" });
-			if (verification_data_entrantes.check_info_caract_(b)){
-				//on regarde si les champs de l'objet ne contiennent pas de caracèrest spéciaux(eg: espace, crochets...) et sont de longueur entre 3 et 10 avant d'envoyer au router
+			traitementData(b.username);
+			traitementData(b.password);			
+			if (isAlphaNumeric(b.password) && isAlphaNumeric(b.username) && isLengthValid(b.password) && isLengthValid(b.username)){								
 				db.login(b.username.toLowerCase(), b.password, this.resp);
 			}else{
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				this.resp.end(JSON.stringify({message: "login_connexion_refused"}));
 			}			
 		}
 		
-		else if (b.ac == "register"){			
-			this.resp.writeHead(200,{"Content -Type": "application/json"});
-			if (verification_data_entrantes.check_info_caract_(b)){
-				//on regarde si les champs de l'objet ne contiennent pas de caracèrest spéciaux(eg: espace, crochets...) et sont de longueur entre 3 et 10 avant d'envoyer au router
+		else if (b.ac == "register"){
+			traitementData(b.username);
+			traitementData(b.password);	
+
+			if (isAlphaNumeric(b.password) && isAlphaNumeric(b.username) && isLengthValid(b.password) && isLengthValid(b.username)){				
 				db.register(b.username, b.password, this.resp);
 			}else {
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				this.resp.end(JSON.stringify({message: "register_problem_info_entered"}));
 			}			
 		}else {
@@ -131,19 +134,38 @@ cb_cookie:
 		if (ret) {
 
 			if (b.ac == "logout"){
-				this.resp.writeHead(200,{"Content -Type": "application/json"});
-				db.logout(this.req.headers.cookie, this.resp);	
+				traitementData(b.id_);			
+				db.logout(b.id_, this.resp);	
 				return;			
-			}else if(b.ac == "delete"){
-				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				b.password +="";//pour forcer en string
-				b.password = b.password.replace(/ /g,"");//on supprime les espaces 
-				if(b.password!=""){
-					db.delete_(this.req.headers.cookie, b.password, this.resp);
-					return;
+			}else if(b.ac == "delete"){	
+				traitementData(b.password);
+				traitementData(b.id_);
+				if(isLengthValid(b.password) && isAlphaNumeric(b.password)){
+					db.delete_(b.id_, b.password, this.resp);					
 				} else{
+					this.resp.writeHead(200, {"Content-Type":"application/json"});
 					this.resp.end(JSON.stringify({message: "error_delete_account"}));	
 				} 
+			}else if(b.ac == "add_friend"){				
+				traitementData(b.friend_to_add);	
+				traitementData(b.id_);			
+				if(isLengthValid(b.friend_to_add && isAlphaNumeric(b.friend_to_add))){//si la taille du string est supérieur à 0 on recherche l'ami sinon ca vaut pas le coup
+					db.add_friend(b.friend_to_add,b.id_, this.resp);
+				}else{
+					this.resp.writeHead(200, {"Content-Type":"application/json"});
+					this.resp.end(JSON.stringify({message: "add_friend_ko_length"}));
+				}				
+			}else if(b.ac == "get_friends"){				
+				db.get_friends(id, this.resp);				
+			}else if(b.ac == "delete_friend"){
+				traitementData(b.friend_to_delete);	
+				traitementData(b.id_);
+				if(isLengthValid(b.friend_to_delete) && isAlphaNumeric(b.friend_to_delete)){
+					db.delete_friend(b.friend_to_delete,b.id_, this.resp);
+				}else{
+					this.resp.writeHead(200, {"Content-Type":"application/json"});
+					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
+				}
 			}else if (b.ac == "pseudo_request_"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				db.pseudo_request_(this.req.headers.cookie, this.resp);
@@ -157,31 +179,6 @@ cb_cookie:
 					this.resp.end(JSON.stringify({message: "search_name_length_too_short"}));
 				}
 				return;
-			}else if(b.ac == "add_friend"){
-				this.resp.writeHead(200, {"Content-Type":"application/json"});				
-				b.friend_to_add += "";//pour le forcer à être un string
-				b.friend_to_add = b.friend_to_add.replace(/ /g,"");//on supprime les espaces 
-				if(b.friend_to_add.length>0){//si la taille du string est supérieur à 0 on recherche l'ami sinon ca vaut pas le coup
-					db.add_friend(b.friend_to_add,this.req.headers.cookie, this.resp);
-				}else{
-					this.resp.end(JSON.stringify({message: "error_adding_friend"}));
-				}
-				return;
-			}else if(b.ac == "get_friends"){
-				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.get_friends(this.req.headers.cookie, this.resp);
-				return;
-			}else if(b.ac == "delete_friend"){				
-				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				b.friend_to_delete += "";//pour forcer à string
-				b.friend_to_delete = b.friend_to_delete.replace(/ /g,"");//on supprim les espaces
-				b.friend_to_delete = b.friend_to_delete.split('-');//l'id recu est de type "pseudo-delete"
-				b.friend_to_delete = b.friend_to_delete[0];
-				if(b.friend_to_delete.length>0){//si le string n'est pas vide on va à la db
-					db.delete_.friend(b.friend_to_delete,this.req.headers.cookie, this.resp);
-				}else{
-					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
-				}
 			}else if(b.ac=="set_info"){
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				b.status_user += "";//forcer à string
@@ -271,5 +268,28 @@ verification_data_entrantes.check_info_caract_ = function(data){
 		if(reg.test(data.username) && reg.test(data.password) && data.username.length >= 3 && data.username.length <= 10 && data.password.length >= 3 && data.password.length <= 10){		
 			return true;
 		}else return false;	
+};
+
+isAlphaNumeric = function(str){
+	var reg = new RegExp(/^\w+$/);//regexp Alphanumeric
+	return reg.test(str);//return vrai si c'est un alphaNumeric
+};
+
+traitementData = function(str){
+//force la data à etre un string et a ne pas contenir d'espace
+	str = str.toString();
+	str = str.replace(/ /g,"");
+	return str;
+};
+
+isLengthValid = function(str){
+//fonction qui vérifie que la chaine de caractère soit comprise entre 3 et 15 caractères
+	minLength = 3;
+	maxLength = 15;
+	if(str.length>=minLength && str.length<=maxLength){
+		return true;
+	}else{
+		return false;
+	}
 };
 
