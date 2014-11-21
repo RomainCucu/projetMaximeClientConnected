@@ -275,23 +275,23 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							console.log("erreur fonction add_friend, fonction find: "+err);
 							res.end(JSON.stringify({message:"erreur_de_la_db_"}));
 							db.close();
-					}else if(results[0]){//si on trouve un document associé au cookie
+					}else if(results[0]){//si on trouve un document associé à l'id
 						if(friend != results[0].pseudo){//si la personne qui demande l'ajout n'est pas la personne qui ajoute
 							var tab =[];//varaiable contenant le tableau à transmettre
 							if (!results[0].friendList){//si l'user n'a pas damis								
-								tab.push(friend_pseudo_to_add);
+								tab.push(friend);
 							}else{//si luser a déjà une friend list
 								tab = results[0].friendList;//le tableau = le tableau de friend list trouvé dans la DB
-								if (tab.indexOf(friend_pseudo_to_add)> -1){//si l'ami est deja dans la friend list
+								if (tab.indexOf(friend)> -1){//si l'ami est deja dans la friend list
 									res.end(JSON.stringify({message:"add_friend_ko_already_friend"}));
 									db.close(); 
 								}else{
-									tab.push(friend_pseudo_to_add);//on rajoute l'ami dans le tableau							
+									tab.push(friend);//on rajoute l'ami dans le tableau							
 								}								
 							}
 							//l'user que l'on veut ajouter n'est ni SOI-M^ME ni déjà présent dans la friend list
 							//on met à jour le document avec le nouveau tableau d'amis			
-							collection.update({id_unique: id},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
+							db.collection('users').update({id_unique: id},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
 								if(err){
 									console.log("erreur fonction add_friend, fonction update: "+err);
 									res.end(JSON.stringify({message:"erreur_de_la_db_"}));
@@ -383,10 +383,10 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 					}else if(results[0]){//si on trouve un document associé au cookie
 						if(results[0].friendList){//si le document a une friend liste
 							var array = results[0].friendList;//on recupere le tableau friend list
-							var index = array.indexOf(friend_to_delete);// on cherche l'index de l'ami à supprimer
+							var index = array.indexOf(friend);// on cherche l'index de l'ami à supprimer
 							if (index > -1) {//si l'ami à supprimer est présent dans la friend list
 							    array.splice(index, 1);//on retire l'ami du tableau								
-							    collection.update({id_unique:id},{ $set: {friendList:array}}, { upsert: true }, function(err, docs){
+							    db.collection('users').update({id_unique:id},{ $set: {friendList:array}}, { upsert: true }, function(err, docs){
 								if(err) {
 									console.log("erreur dans la fonction delete_friend, fonction update: "+err);
 									res.end(JSON.stringify({message:"erreur_de_la_db_"}));

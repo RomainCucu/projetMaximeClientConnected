@@ -134,6 +134,27 @@ go_post:
 					this.resp.writeHead(200, {"Content-Type":"application/json"});
 					this.resp.end(JSON.stringify({message: "error_delete_account"}));	
 				} 
+			}else if(b.ac == "add_friend"){				
+				traitementData(b.friend_to_add);	
+				traitementData(b.id_);			
+				if(isLengthValid(b.friend_to_add) && isAlphaNumeric(b.friend_to_add)){//si la taille du string est supérieur à 0 on recherche l'ami sinon ca vaut pas le coup
+					db.add_friend(b.friend_to_add,b.id_, this.resp);
+				}else{
+					this.resp.writeHead(200, {"Content-Type":"application/json"});
+					this.resp.end(JSON.stringify({message: "add_friend_ko_length"}));
+				}				
+			}else if(b.ac == "delete_friend"){
+				traitementData(b.friend_to_delete);	
+				traitementData(b.id_);
+				if(isLengthValid(b.friend_to_delete) && isAlphaNumeric(b.friend_to_delete)){
+					db.delete_friend(b.friend_to_delete,b.id_, this.resp);
+				}else{
+					this.resp.writeHead(200, {"Content-Type":"application/json"});
+					this.resp.end(JSON.stringify({message: "error_deleting_friend"}));
+				}
+			}else if(b.ac == "get_friends"){
+				traitementData(b.id_);				
+				db.get_friends(b.id_, this.resp);				
 			}
 		else {
 			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
