@@ -56,7 +56,7 @@ index.fill_data_login = function(){
 
 index.test = function(){
 	//index.post({ac:"register",username:"romain2",password:"romain"},index.callback);
-	//index.post({ac:"login",username:"romain",password:"romain"},index.callback);
+	index.post({ac:"login",username:"romain",password:"romain"},index.callback);
 	//index.post({ac:"logout",id_:"rom13970612"},index.callback);
 	//index.post({ac:"delete",id_:"rom41665558", password:"romain"},index.callback);
 	//index.post({ac:"add_friend",id_:"rom13970612", friend_to_add:"romainmomo2"},index.callback);
