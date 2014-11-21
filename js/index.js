@@ -55,8 +55,10 @@ index.fill_data_login = function(){
 
 
 index.test = function(){
+	//index.post({ac:"register",username:"romain",password:"romain"},index.callback);
 	index.post({ac:"login",username:"romain",password:"romain"},index.callback);
-	index.post({ac:"register",username:"romain1992",password:"romain"},index.callback);
+	
+	//index.post({ac:"logout",id_:"546a49662d6d510f4d05cf96"},index.callback);
 };
 
 index.post = function (data, callback) {
@@ -73,8 +75,8 @@ index.callback = function () {
 	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
 	console.log(r);
 	console.log("status: "+this.status);
-	if (this.readyState == 4 && this.status == 200) {		
-		console.log("this.responsetext :" + this.responseText);
+	/*if (this.readyState == 4 && this.status == 200) {		
+	//	console.log("this.responsetext :" + this.responseText);
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
 		
 		if (r.message=="login_connexion_autorised_"){
@@ -97,7 +99,7 @@ index.callback = function () {
 			//alert("demande  rejetée !");
 			console.log("ko");
 		}
-}
+}*/
 };
 
 index.replace_content_by_animation_GIF_loader = function(id){

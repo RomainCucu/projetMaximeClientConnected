@@ -1,7 +1,7 @@
 var util = require("util"); 
 var url = require("url"); 
 var fs = require("fs");
-var db = require("./db.js");
+var db = require("./db2.js");
 
 var verification_data_entrantes = {};
 
@@ -120,7 +120,12 @@ go_post:
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
 				this.resp.end(JSON.stringify({message: "register_problem_info_entered"}));
 			}			
-		}else {
+		}else if (b.ac == "logout"){
+				traitementData(b.id_);			
+				db.logout(b.id_, this.resp);	
+				return;			
+			}
+		else {
 			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
 		}
 		

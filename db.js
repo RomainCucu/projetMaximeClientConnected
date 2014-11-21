@@ -18,7 +18,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });
 		var collection = db.collection('users');
-		collection.update({username: ObjectId(id)},{ $set: {connected:1}}, { upsert: true }, function(err, docs){
+		collection.update({username: username, password:pwd},{ $set: {connected:1}}, { upsert: true }, function(err, docs){
 			if (err) {//en cas d'erreur de la fonction find
 				console.log("erreur lors dans la fonction login, collection.find: "+err);
 				res.end(JSON.stringify({message: "login_ko"}));
