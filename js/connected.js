@@ -104,8 +104,10 @@ connected.post = function (data, callback) {
 
 
 connected.callback = function () {
+
 	if (this.readyState == 4 && this.status == 200) {
 		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+		console.log(r);
 		/*delete account*/
 		if (r.message=="account_deleted"){
 			window.location = "../index.html";

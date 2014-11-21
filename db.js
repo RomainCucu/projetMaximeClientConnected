@@ -136,10 +136,10 @@ exports.get_info=function(c, res){
 					console.log("erreur fonction get_info fonction find 1: "+err);
 					res.end(JSON.stringify({message:"erreur_de_la_db_"}));
 					db.close();
-				} else if (results1[0]){
+				} else if (results1[0]){//
 					r1=results1[0].friendList; 
-				if(r1){ 
-				if(r1.length>=1){ // cool il a des amis
+					if(r1){ 
+					if(r1.length>=1){ // cool il a des amis
 						var tab = [];
 						results1[0].friendList.forEach(function(entry){
 							tab.push(entry.toString());
@@ -175,6 +175,7 @@ exports.get_info=function(c, res){
 											obj_a_transmettre.donnees=results_analyse;
 											obj_a_transmettre.status_perso=status_perso[0].status_user; // le status est tjrs le premier elmt du tab
 											res.end(JSON.stringify(obj_a_transmettre)); 
+											db.close();
 								} else { // si ya 0 statut à afficher
 									res.end(JSON.stringify({message:"no_status_to_show"})); 
 									db.close();
@@ -186,12 +187,71 @@ exports.get_info=function(c, res){
 						res.end(JSON.stringify({message:"no_friends"}));
 						db.close();
 					}	
+				}else{
+					res.end(JSON.stringify({message:"cookie_not_found"}));
+					db.close(); // on referme la db
 				}
 			});
 		}
 });
 };
 
+exports.get_info_all_friends=function(c, res){
+	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
+	if(err) {	
+				console.log("erreur fonction get_info connection: "+err);
+				res.end(JSON.stringify({message: "erreur_connection"}));
+				return;
+			}
+	else{	
+			c = c.split("cookieName=");
+			db.collection('users').find({"cookie.value": c[1]}).toArray(function(err, results1){
+				if(err){
+					console.log("erreur fonction get_info fonction find 1: "+err);
+					res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+					db.close();
+				}else if(!results1[0]){//si pas de document trouvé avec le cookie
+					res.end(JSON.stringify({message:"cookie_not_found"}));
+					db.close(); 
+				}else if (results1[0]){//si on a un document trouvé	
+					if(!results1[0].friendList || results1[0].friendList.length<1){//si pas de friend liste ou friend liste vide
+						res.end(JSON.stringify({message:"no_friends"}));
+						db.close();
+					}else{//ici il a au moins un amis
+						var tab = [];				
+						results1[0].friendList.forEach(function(username){
+							tab.push(username.toString());
+						});//for each
+						db.collection('statutBox').find( {  username:{ $in: tab }} ).sort({"date_status":-1}).limit(21).toArray(function(err, results){
+							if(err){
+								console.log("erreur fonction get_info fonction find 2: "+err);
+								res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+								db.close();
+							} else {
+								res.end(JSON.stringify({message:"status_update",donnees:results}));
+								db.close();
+							}
+						});
+						
+					}
+				}
+				});
+		}						
+});
+};
+
+get_info_ = function(collection, username, array){
+	collection.find({username:username} ).sort({"date_status":-1}).limit(3).toArray(function(err, results){
+		if(err){
+			console.log("erreur fonction get_info fonction find 2: "+err);
+			//res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+			//db.close();
+		} else {
+			array.push(results);
+			return;
+		}
+	});
+}
 
 exports.set_info=function(status_user, cookie, res){	
 MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
