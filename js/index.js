@@ -4,6 +4,7 @@
 		CHANGER JUSTE LE MESSAGE DE RETOUR DU ROUTER POUR COMPRENDRE CE QUIL SE PASSE
 */
 
+
 var index = {}; // objet contenant toutes nos fonctions
 var data = {}; //objet : transmettre au routeur
 var contenuHTML = {};//objet qui va contenir temporairement le code html (du bouton login par exemple)
@@ -54,6 +55,7 @@ index.fill_data_login = function(){
 };
 
 
+
 index.test = function(){
 	//index.post({ac:"register",username:"tetris",password:"rosh"},index.callback);
 	//index.post({ac:"login",username:"romain",password:"romain"},index.callback);
@@ -74,6 +76,7 @@ index.post = function (data, callback) {
     xhr.send(JSON.stringify(data));
 };
 
+
 // fonction de retour pour notre objet index
 index.callback = function () {
 // si tout s'est bien passé
@@ -85,6 +88,7 @@ if (this.status == 200 && this.readyState==4) {
 };
 
 
+/*
 index.replace_content_by_animation_GIF_loader = function(id){
 	contenuHTML.string = document.getElementById(id).innerHTML; // objet contenuHTML créé en haut du doc
 	contenuHTML.id = id;
@@ -93,14 +97,14 @@ index.replace_content_by_animation_GIF_loader = function(id){
 	// script qui simule l'evenement clique sur un bouton (ici celui qui lance le modal dans le fichier index.html
 	/*var evt = document.createEvent("MouseEvents");
 	evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
-	document.getElementById("bt1").dispatchEvent(evt);*/
-};
+	document.getElementById("bt1").dispatchEvent(evt);
+};*/
 
+/*
 index.mettre_les_cases_en_rouges_du_formulaire = function(classname){
-	/*
-	prend en paramettre le classname
+		prend en paramettre le classname
 	et ajoute has error a la classe pour dire que c pas bon et entoure la case en rouge
-	*/
+	
 	var arr =document.getElementsByClassName(classname);
 	if(arr.length>0){
 		for(i=0;i<arr.length;i++){
@@ -109,6 +113,39 @@ index.mettre_les_cases_en_rouges_du_formulaire = function(classname){
 	}
 	return;
 };
+*/
+
+/*
+var index = {}; // objet contenant toutes nos fonctions
+
+index.test = function(){
+	//index.post({ac:"register",username:"romain2",password:"romain"},index.callback);
+	//index.post({ac:"login",username:"romain",password:"romain"},index.callback);
+	index.post({ac:"logout",id_:"rom13970612"},index.callback);
+	//index.post({ac:"delete",id_:"rom41665558", password:"romain"},index.callback);
+	//index.post({ac:"add_friend",id_:"rom13970612", friend_to_add:"romainmomo2"},index.callback);
+	//index.post({ac:"delete_friend",id_:"rom13970612", friend_to_delete:"romainmomo"},index.callback);
+	//index.post({ac:"get_friends",id_:"rom13970612"},index.callback);
+
+};
+
+
+
+// fonction de retour pour notre objet index
+index.callback = function () {
+	// si tout s'est bien passé
+	if (this.status == 200 && this.readyState==4) {
+	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
+	
+		console.log(r);
+		console.log(this);
+	}
+	
+
+};
+
+*/
+
 
 window.onload = function(){
 		setTimeout(index.test, 1);

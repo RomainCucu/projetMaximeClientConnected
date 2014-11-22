@@ -62,13 +62,14 @@ get_method:
 		this.filetype = this.filetype[this.filetype.length - 1];
 		this.path = "." + u.path; //the website in the same directory than the node server
 		//console.log(this.path);
+		this.read_file();/*
 		if (u.path == "/html/connected.html")//pour voir dans quel page on va
 			{				
 				db.valid_cookie(this.req.headers.cookie, this, "check_user"); // on verifie si c un user (si oui il accede aux pages ou il faut être admin sinon on le redirige sur la page d'accueil)
 			}
 		else{
 			this.read_file();
-			}
+			}*/
 		},
 
 check_user:
@@ -169,7 +170,7 @@ go_post:
 				}
 			}
 		else {
-			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
+			
 		}
 		
 		
@@ -302,7 +303,7 @@ function () {
 	this.resp.write(this.file);
 	this.resp.end();
 	}
-}
+};
 
 
 // Pour vérifier les données entrante
