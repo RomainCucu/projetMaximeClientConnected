@@ -1,3 +1,5 @@
+var ObjectId = require('mongodb').ObjectID;
+
 var MongoClient = require('mongodb').MongoClient
     , format = require('util').format;
 
@@ -25,6 +27,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			}
 			else if(docs==1){
 				db.collection('users').find({username:username,password:pwd}).toArray(function(err,results){
+				console.log(results);
 					infos={};//objet transmis au client
 					infos.message="login_ok";
 					infos.id=""+results[0].id_unique;
@@ -93,7 +96,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			return;
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });
-		db.collection('users').update({id_unique: id},{ $set: {"connected":0}}, function(err, docs){
+		db.collection('users').update({_id: ObjectId(id)},{ $set: {"connected":0}}, function(err, docs){
 					if(err) {
 						res.end(JSON.stringify({message: "logout_ko"}));
 						db.close();
@@ -127,7 +130,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			}
 	else{
 		res.writeHead(200, {"Content-Type": "application/json" });		
-		db.collection('users').remove({id_unique: id, password:password},function(err, doc){
+		db.collection('users').remove({_id: ObjectId(id), password:password},function(err, doc){
 			if(err){
 				console.log("erreur fonction delete fonction remove: "+err);
 				res.end(JSON.stringify({message:"error_delete_account"})); 
@@ -150,15 +153,13 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 
 /** La fonction prend en paramètre l'id du client, et la réponse à transmettre au client.
 *Dans la collection users, on recherche un document qui match avec l'id.
-*Si un document est trouvé, grace à une boucle foreach, on va rechercher dans cette même collection
+*Si un document est trouvé, grace $in, on va rechercher dans cette même collection
 *tous les documents correspondant au différents username présent dans le champs friendliste (un tableau de string)
-*de la précédente recherche. On stocke à chaque "tour de boucle" (PAS VRAIMENT CA POUR UN FOREACH)
-*le pseudo de chacun de ses amis dans un tableau.
+*de la précédente recherche. On stocke les documents trouvés dans un tableau.
+*A l'aide d'un foreach, on stocke uniquement le pseudo et le status de chaque friends dans un tableau (afin de ne pas envoyer le mdp).
 *On renvoie alors le tableau au client.
 */
 exports.get_info=function(id, res){
-
-
 	MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime', function(err, db) {
 	if(err) {	
 				console.log("erreur fonction get_info connection: "+err);
@@ -167,42 +168,31 @@ exports.get_info=function(id, res){
 			}
 	else{	
 			var collection2 = db.collection('users'); 
-			collection2.find({id_unique: id}).toArray(function(err, results1){
+			collection2.find({_id: ObjectId(id)}).toArray(function(err, results1){
 				if(err){
 					console.log("erreur fonction get_info fonction find 1: "+err);
 					res.end(JSON.stringify({message:"erreur_de_la_db_"}));
 					db.close();
 				} else if (results1[0]){ // si cette personne existe
-					r1=results1[0].friendList;  
-					if(r1){
-					if(r1.length>=1){ // si il a au moins un ami
-						var tab = []; // il contiendra les username des amis
-						results1[0].friendList.forEach(function(entry){
-							tab.push(entry.toString());
-						})
-	
-						collection2.find( {  username:{ $in: tab }} ).toArray(function(err, results){
+					console.log(results1[0]);	
+					if(results1[0].friendList.length>=1){ // si il a au moins un ami
+						var tab_friends=[];
+						collection2.find({username:{$in: results1[0].friendList}}).toArray(function(err, results){
 							if(err){
-								console.log("erreur fonction get_info fonction find 2: "+err);
-								res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+									console.log("erreur fonction get_info fonction find 2: "+err);
+									res.end(JSON.stringify({message:"erreur_de_la_db_"}));
+									db.close();
+							}else{
+								console.log(results);
+								var tab = [];
+								results.forEach(function(entry){
+									tab.push([entry.username, entry.statut]);
+								});
+								res.end(JSON.stringify({message:"get_infos", donnees:tab}));
 								db.close();
-							} else {
-													
-											var results_analyse=[];
-											for(b in results){
-												if(results.status){ // si l'ami a un status
-													results_analyse.push(results[b].status);
-												} else results_analyse.push("no status to show");
-											}
-
-											var obj_a_transmettre={};
-											obj_a_transmettre.message="status_update";
-											obj_a_transmettre.donnees=results_analyse;
-											res.end(JSON.stringify(obj_a_transmettre)); 
-											db.close();
 							}
-					});
-				} }// if r1
+						});
+					}
 					else {
 						res.end(JSON.stringify({message:"no_friends"}));
 						db.close();
@@ -233,7 +223,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			}
 	else{		
 			var collection = db.collection('users'); // on veut acceder à la collection users de la db ProjetEsme
-			collection.update({_id: id}, { $set: {status_user:status_user}}, { upsert: true }, function(err, doc){
+			collection.update({_id: ObjectId(id)}, { $set: {statut:status_user}}, { upsert: true }, function(err, doc){
 							if(err){
 								console.log("erreur fonction set_info fonction find: "+err);
 								res.end(JSON.stringify({message:"erreur_de_la_db_"}));
@@ -270,7 +260,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 		return;
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });		
-		db.collection('users').find({id_unique: id}).toArray(function(err, results){
+		db.collection('users').find({_id: ObjectId(id)}).toArray(function(err, results){
 					if(err) {
 							console.log("erreur fonction add_friend, fonction find: "+err);
 							res.end(JSON.stringify({message:"erreur_de_la_db_"}));
@@ -291,7 +281,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 							}
 							//l'user que l'on veut ajouter n'est ni SOI-M^ME ni déjà présent dans la friend list
 							//on met à jour le document avec le nouveau tableau d'amis			
-							db.collection('users').update({id_unique: id},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
+							db.collection('users').update({_id: ObjectId(id)},{ $set: {friendList:tab}}, { upsert: true }, function(err, docs){
 								if(err){
 									console.log("erreur fonction add_friend, fonction update: "+err);
 									res.end(JSON.stringify({message:"erreur_de_la_db_"}));
@@ -334,7 +324,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			return;
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });						
-		db.collection('users').find({id_unique: id}).toArray(function(err, results){//on veut acceder à la friend list du document avec le cookie correspondant
+		db.collection('users').find({_id: ObjectId(id)}).toArray(function(err, results){//on veut acceder à la friend list du document avec le cookie correspondant
 					if(err) {
 						console.log("erreur fonction add_friends, fonction find: "+err);
 						res.end(JSON.stringify({message:"erreur_de_la_db_"}));
@@ -375,7 +365,7 @@ MongoClient.connect('mongodb://romain:alex@dogen.mongohq.com:10034/projet_maxime
 			return;
 	}else{
 		res.writeHead(200, {"Content-Type": "application/json" });				
-		db.collection('users').find({id_unique: id}).toArray(function(err, results){
+		db.collection('users').find({_id: ObjectId(id)}).toArray(function(err, results){
 					if(err) {//erreur fonction find
 							console.log("erreur fonction delete_frien, fonction find: "+err);
 							res.end(JSON.stringify({message:"erreur_de_la_db_"}));

@@ -55,14 +55,15 @@ index.fill_data_login = function(){
 
 
 index.test = function(){
-	//index.post({ac:"register",username:"romain2",password:"romain"},index.callback);
-	index.post({ac:"login",username:"romain",password:"romain"},index.callback);
-	//index.post({ac:"logout",id_:"rom13970612"},index.callback);
-	//index.post({ac:"delete",id_:"rom41665558", password:"romain"},index.callback);
-	//index.post({ac:"add_friend",id_:"rom13970612", friend_to_add:"romainmomo2"},index.callback);
+	//index.post({ac:"register",username:"tetris",password:"rosh"},index.callback);
+	//index.post({ac:"login",username:"romain",password:"romain"},index.callback);
+	//index.post({ac:"logout",id_:"546fbd99128a325c7ab4f728"},index.callback);
+	//index.post({ac:"delete",id_:"5470793b2682e76912fee545", password:"rosh"},index.callback);
+	index.post({ac:"add_friend",id_:"547074bba44aed3b124f73e1", friend_to_add:"tetris"},index.callback);
 	//index.post({ac:"delete_friend",id_:"rom13970612", friend_to_delete:"romainmomo"},index.callback);
 	//index.post({ac:"get_friends",id_:"rom13970612"},index.callback);
-
+	//index.post({ac:"get_info", id_:"546fbd99128a325c7ab4f728"}, index.callback);
+	//index.post({ac:"set_info", status_user:"Pour reussir, il faut s'entourer de gens ailant du succès", id_:"546fbd99128a325c7ab4f728"}, index.callback);
 };
 
 index.post = function (data, callback) {
@@ -75,36 +76,14 @@ index.post = function (data, callback) {
 
 // fonction de retour pour notre objet index
 index.callback = function () {
-	// si tout s'est bien passé
+// si tout s'est bien passé
+if (this.status == 200 && this.readyState==4) {
 	var r = JSON.parse(this.responseText); // conversion string en Objet JSON
 	console.log(r);
-	console.log("status: "+this.status);
-	/*if (this.readyState == 4 && this.status == 200) {		
-	//	console.log("this.responsetext :" + this.responseText);
-		var r = JSON.parse(this.responseText); // conversion string en Objet JSON
-		
-		if (r.message=="login_connexion_autorised_"){
-			window.location = "./html/connected.html";
-		}else if (r.message=="erreur_login_information_entrante"){
-			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-			index.mettre_les_cases_en_rouges_du_formulaire("boites_pour_entrer_les_login_");
-			alert("Erreur de connexion");
-		}else if (r.message == "register_problem_info_entered"){
-			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-			alert("usernamen password length must be between 3 and 10 and only alphanumerical symbols please !");
-		}else if(r.message=="username_existant_"){
-			alert("username existant");
-			document.getElementById(contenuHTML.id).innerHTML = contenuHTML.string;//pour remettre le bouton originel (car gif qui tourne)
-		}else if(r.message == "register_ok_"){		
-			data.ac = "login";
-			index.post(data, index.callback);//passage au router des données
-		}
-		else{
-			//alert("demande  rejetée !");
-			console.log("ko");
-		}
-}*/
+	console.log(this);
+	}
 };
+
 
 index.replace_content_by_animation_GIF_loader = function(id){
 	contenuHTML.string = document.getElementById(id).innerHTML; // objet contenuHTML créé en haut du doc

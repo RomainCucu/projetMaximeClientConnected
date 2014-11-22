@@ -155,6 +155,18 @@ go_post:
 			}else if(b.ac == "get_friends"){
 				traitementData(b.id_);				
 				db.get_friends(b.id_, this.resp);				
+			}else if(b.ac=="get_info"){
+				console.log('router');
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				db.get_info(b.id_, this.resp);
+			}else if(b.ac=="set_info"){
+				this.resp.writeHead(200, {"Content-Type":"application/json"});
+				b.status_user += "";//forcer à string
+				if(b.status_user.length>=1 && b.status_user.length<150){//status length entre 1 et 150 caract
+					db.set_info(b.status_user, b.id_, this.resp);
+				}else{
+					this.resp.end(JSON.stringify({message: "too_short_or_too_long"}));
+				}
 			}
 		else {
 			db.valid_cookie(this.req.headers.cookie, this, "cb_cookie");
@@ -225,8 +237,9 @@ cb_cookie:
 				}
 				return;
 			}else if(b.ac=="get_info"){
+				console.log('router');
 				this.resp.writeHead(200, {"Content-Type":"application/json"});
-				db.get_info(this.req.headers.cookie, this.resp);
+				db.get_info(b.id_, this.resp);
 			}else{
 				util.log("INFO - Action not found : " + b.ac);
 				this.resp.writeHead(501, {"Content -Type": "application/json"});
