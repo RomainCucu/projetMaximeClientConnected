@@ -6,6 +6,17 @@
 ######Contributors : Alexandre Magne, Romain Cunault
 
 [pour écrire en .MD](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+#### Infos concernant les modules à installer :
+Afin de faire fonctionner notre application nous utilisons les modles suivants : mongodb et jsdoc
+Pour les installer: 
+*npm install mongodb 
+*npm install jsdoc@"<=3.3.0"
+
+#### Documentation du code : 
+Nous avons ajouter à notre code une documentation jsdoc.
+Ainsi dans le dossier out, il suffit de cliquer sur db.js.html afin de voir une doc détaillée et précise sur chaque fonction de notre database (fichier db.js).
+
 #Organisation de la DataBase
 La database est de type MongoDB et est hostée sur Compose. Le seul module nécessaire est MongoDB.
 
