@@ -10,8 +10,8 @@
 #### Infos concernant les modules à installer :
 Afin de faire fonctionner notre application nous utilisons les modles suivants : mongodb et jsdoc
 Pour les installer: 
-*npm install mongodb 
-*npm install jsdoc@"<=3.3.0"
+- npm install mongodb 
+- npm install jsdoc@"<=3.3.0"
 
 #### Documentation du code : 
 Nous avons ajouter à notre code une documentation jsdoc.
